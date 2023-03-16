@@ -102,7 +102,7 @@ static int cmd_x(char *args) {
   int N=atoi(argN);
   if(N==-1)
   {
-    printf("错误的参数N\n")
+    printf("错误的参数N\n");
     return 0;
   }
   printf("N的值为%d\n",N);
