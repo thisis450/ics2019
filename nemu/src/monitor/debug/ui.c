@@ -40,7 +40,7 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
   char* arg=strtok(args," ");
-  int N=0;
+  uint64_t N=0;
   if(arg==NULL)
   {
     N=1;
@@ -50,7 +50,7 @@ static int cmd_si(char *args) {
     if(N<0)
     {
       printf("小于0的执行步数");
-      return -1;
+      return 0;
     }
   }
 cpu_exec(N);
