@@ -125,8 +125,8 @@ static int cmd_x(char *args) {
   for(int i=0;i<N;i++)
   {
     uint32_t val=vaddr_read(expr_result+i*4,4);
-        uint32_t data = vaddr_read(addr + i * 4,4);
-        printf("0x%08x  " , addr + i * 4 );
+    uint32_t data = vaddr_read(expr_result + i * 4,4);
+        printf("0x%08x  " , expr_result + i * 4 );
         for(int j =0 ; j < 4 ; j++){
             printf("0x%02x " , data & 0xff);
             data = data >> 8 ;
