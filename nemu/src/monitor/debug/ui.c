@@ -100,7 +100,7 @@ static int cmd_x(char *args) {
     return 0;
   }
   int N=atoi(argN);
-  if(N==-1)
+  if(N<=0)
   {
     printf("错误的参数N\n");
     return 0;
