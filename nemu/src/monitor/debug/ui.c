@@ -105,14 +105,27 @@ static int cmd_x(char *args) {
     printf("错误的参数N\n");
     return 0;
   }
-  printf("N的值为%d\n",N);
-  char *expr=args+strlen(argN)+1;
-  if(expr>=args+arglen)
+  //printf("N的值为%d\n",N);
+  char *exprs=args+strlen(argN)+1;
+  if(exprs>=args+arglen)
   {
     printf("没有输入表达式\n");
     return 0;
   }
-  printf("expr为%s\n",expr);
+  //printf("expr为%s\n",expr);
+  bool success;
+  vaddr_t expr_result=expr(exprs,&success);
+  if(success==false)
+  {
+    printf("表达式求解过程中出现了错误\n");
+    return 0;
+  }
+  printf("Memory\n");
+  for(int i=0;i<N;i++)
+  {
+    printf("0x%x",expr_result);
+    uint32_t val=vaddr_read(expr_result,4)
+  }
   return 0;
 }
 
