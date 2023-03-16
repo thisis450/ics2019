@@ -47,14 +47,38 @@ static int cmd_si(char *args) {
   }
   else{
     N=atoi(arg);
-    
+
   }
 cpu_exec(N);
   return 0;
 }
 
 static int cmd_info(char *args) {
-  return -1;
+  char* arg=strtok(args," ");
+  if(arg==NULL)
+  {
+    printf("cmd_info没有参数");
+    return 0;
+  }
+  if (strcmp(arg,"r")==0)
+  {
+            printf("eax is %x\n",cpu.eax);
+        printf("ecx is %x\n",cpu.ecx);
+        printf("edx is %x\n",cpu.edx);
+        printf("ebx is %x\n",cpu.ebx);
+        printf("esp is %x\n",cpu.esp);
+        printf("ebp is %x\n",cpu.ebp); 
+        printf("esi is %x\n",cpu.esi);
+        printf("edi is %x\n",cpu.edi);
+        return 0;
+  }
+  if(strcmp(arg,"w")==0)
+  {
+    print_wp();
+    return 0;
+  }
+  printf("错误的参数");
+  return 0;
 }
 
 static int cmd_p(char *args) {
