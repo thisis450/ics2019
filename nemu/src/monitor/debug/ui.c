@@ -77,7 +77,7 @@ static int cmd_info(char *args) {
     //print_wp();
     return 0;
   }
-  printf("错误的参数");
+  printf("info命令错误的参数\n");
   return 0;
 }
 
