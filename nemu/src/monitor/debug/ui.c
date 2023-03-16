@@ -123,8 +123,7 @@ static int cmd_x(char *args) {
   printf("Memory\n");
   for(int i=0;i<N;i++)
   {
-    printf("0x%x",expr_result);
-    uint32_t val=vaddr_read(expr_result,4)
+    uint32_t val=vaddr_read(expr_result+i*4,4);
   }
   return 0;
 }
