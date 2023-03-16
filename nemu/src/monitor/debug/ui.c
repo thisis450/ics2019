@@ -113,7 +113,7 @@ static int cmd_x(char *args) {
     return 0;
   }
   //printf("expr为%s\n",expr);
-  bool success;
+  bool success=true;
   //vaddr_t expr_result=expr(exprs,&success);
   vaddr_t expr_result=atoi(expr);
   if(success==false)
