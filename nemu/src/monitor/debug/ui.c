@@ -70,6 +70,7 @@ static int cmd_info(char *args) {
         printf("ebp is %x\n",cpu.ebp); 
         printf("esi is %x\n",cpu.esi);
         printf("edi is %x\n",cpu.edi);
+        printf("pc is %x\n",cpu.pc);
         return 0;
   }
   if(strcmp(arg,"w")==0)
