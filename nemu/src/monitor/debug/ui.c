@@ -83,11 +83,18 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
-  return -1;
+  return 0;
 }
 
 static int cmd_x(char *args) {
-  return -1;
+  if(args==NULL)
+  {
+    printf("扫描内存缺少参数");
+    return 0;
+  }
+	int num,exprs;
+	sscanf(args,"%d%x",&num,&exprs);
+  return 0;
 }
 
 static int cmd_w(char *args) {
