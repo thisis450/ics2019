@@ -78,7 +78,7 @@ static int cmd_info(char *args) {
     //print_wp();
     return 0;
   }
-  printf("info命令错误的参数\n");
+  printf("info命令未输入参数\n");
   return 0;
 }
 
@@ -89,11 +89,30 @@ static int cmd_p(char *args) {
 static int cmd_x(char *args) {
   if(args==NULL)
   {
-    printf("扫描内存缺少参数");
+    printf("扫描内存缺少参数\n");
     return 0;
   }
-	int num,exprs;
-	sscanf(args,"%d%x",&num,&exprs);
+  int arglen=strlen(args);
+  char *argN=strtok(args," ");
+  if(argN==NULL)
+    {
+    printf("扫描内存缺少参数\n");
+    return 0;
+  }
+  int N=atoi(argN);
+  if(N==-1)
+  {
+    printf("错误的参数N\n")
+    return 0;
+  }
+  printf("N的值为%d\n",N);
+  char *expr=args+strlen(argN)+1;
+  if(expr>=args+arglen)
+  {
+    printf("分割时出现了溢出的情况\n");
+    return 0;
+  }
+  printf("expr为%s\n",expr);
   return 0;
 }
 
