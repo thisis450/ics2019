@@ -74,7 +74,7 @@ static int cmd_info(char *args) {
   }
   if(strcmp(arg,"w")==0)
   {
-    print_wp();
+    //print_wp();
     return 0;
   }
   printf("错误的参数");
