@@ -39,7 +39,22 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
-  return -1;
+  char arg=strtok(args," ");
+  int N=0;
+  if(arg==NULL)
+  {
+    N=1;
+  }
+  else{
+    N=atoi(arg);
+    if(N<0)
+    {
+      printf("小于0的执行步数");
+      return -1;
+    }
+  }
+cpu_exec(N);
+  return 0;
 }
 
 static int cmd_info(char *args) {
