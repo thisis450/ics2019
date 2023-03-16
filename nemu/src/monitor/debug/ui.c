@@ -47,11 +47,7 @@ static int cmd_si(char *args) {
   }
   else{
     N=atoi(arg);
-    if(N<0)
-    {
-      printf("小于0的执行步数");
-      return 0;
-    }
+    
   }
 cpu_exec(N);
   return 0;
