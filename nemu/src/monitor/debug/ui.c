@@ -114,7 +114,8 @@ static int cmd_x(char *args) {
   }
   //printf("expr为%s\n",expr);
   bool success;
-  vaddr_t expr_result=expr(exprs,&success);
+  //vaddr_t expr_result=expr(exprs,&success);
+  vaddr_t expr_result=atoi(expr);
   if(success==false)
   {
     printf("表达式求解过程中出现了错误\n");
@@ -124,6 +125,15 @@ static int cmd_x(char *args) {
   for(int i=0;i<N;i++)
   {
     uint32_t val=vaddr_read(expr_result+i*4,4);
+        uint32_t data = vaddr_read(addr + i * 4,4);
+        printf("0x%08x  " , addr + i * 4 );
+        for(int j =0 ; j < 4 ; j++){
+            printf("0x%02x " , data & 0xff);
+            data = data >> 8 ;
+        }
+        printf("\n");
+
+    
   }
   return 0;
 }
