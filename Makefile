@@ -11,6 +11,6 @@ clean:
 
 submit: clean
 	git gc
-	STUID=$(STUID) STUNAME=$(STUNAME) bash -c "$$(curl -s http://ics.nju.edu.cn/people/yanyanjiang/teach/submit.sh)"
+	cd .. && tar cj $(shell basename `pwd`) > $(STU_ID).tar.bz2
 
 .PHONY: default clean submit
