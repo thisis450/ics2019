@@ -38,6 +38,30 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+  return -1;
+}
+
+static int cmd_info(char *args) {
+  return -1;
+}
+
+static int cmd_p(char *args) {
+  return -1;
+}
+
+static int cmd_x(char *args) {
+  return -1;
+}
+
+static int cmd_w(char *args) {
+  return -1;
+}
+
+static int cmd_d(char *args) {
+  return -1;
+}
+
 static struct {
   char *name;
   char *description;
@@ -46,18 +70,12 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "格式 si [N] 使用举例 si 10 让程序单步执行N条指令后暂停执行,
-当N没有给出时, 缺省为1", cmd_si },
-{ "info", "打印程序状态 格式 info SUBCMD 使用举例 info r打印寄存器状态
-
-info w打印监视点信息", cmd_info },
-{ "p", "表达式求值 格式 p EXPR 举例：p $eax + 1 求出表达式EXPR的值, 将结果作为起始内存
-地址, 以十六进制形式输出连续的N个4字节", cmd_p },
-{ "x", "扫描内存 格式 x N EXPR 使用举例	x 10 $esp 求出表达式EXPR的值, 将结果作为起始内存
-地址, 以十六进制形式输出连续的N个4字节", cmd_x },
-{ "w", "设置监视点	格式 w EXPR 举例：w *0x2000 当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w },
-{ "d", "删除监视点  格式 d N 举例：d 2 删除序号为N的监视点
-备注:", cmd_d },
+  { "si", "格式 si [N] 使用举例 si 10 让程序单步执行N条指令后暂停执行,当N没有给出时, 缺省为1",cmd_si},
+  { "info", "打印程序状态 格式 info SUBCMD 使用举例 info r打印寄存器状态info w打印监视点信息", cmd_info },
+  { "p", "表达式求值 格式 p EXPR 举例：p $eax + 1 求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_p },
+  { "x", "扫描内存 格式 x N EXPR 使用举例	x 10 $esp 求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节", cmd_x },
+  { "w", "设置监视点	格式 w EXPR 举例：w *0x2000 当表达式EXPR的值发生变化时, 暂停程序执行", cmd_w },
+  { "d", "删除监视点  格式 d N 举例：d 2 删除序号为N的监视点备注", cmd_d },
 
   /* TODO: Add more commands */
 
