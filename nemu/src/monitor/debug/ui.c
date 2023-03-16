@@ -109,7 +109,7 @@ static int cmd_x(char *args) {
   char *expr=args+strlen(argN)+1;
   if(expr>=args+arglen)
   {
-    printf("分割时出现了溢出的情况\n");
+    printf("没有输入表达式\n");
     return 0;
   }
   printf("expr为%s\n",expr);
