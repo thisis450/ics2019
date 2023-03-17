@@ -150,6 +150,7 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
+  return 0;
   TODO();
 
   return 0;
