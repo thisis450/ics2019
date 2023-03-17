@@ -177,8 +177,66 @@ bool check_parentheses(int p,int q)
   return true;
 }
 
+int get_pr(int n)
+{
+  if(tokens[i].type=='*'||tokens[i].type=='/')
+  return 3;
+  if(tokens[i].type=='+'||tokens[i].type=='-')
+  return 2;
+  if(tokens[i].type==TK_EQ||tokens[i].type==TK_NEQ)
+  return 1;
+  if(tokens[i].type==TK_AND||tokens[i].type==TK_OR)
+  return 0;
+  return 999;
+}
 int find_dominant_operator(int p,int q)
 {
+  int i=0,left=0,pr=-100,position=p;
+  for(i=p;i<=q;i++)
+  {
+    if(tokens[i].type=='(')
+    {
+      left++;
+      i++;
+      while(1)
+      {
+        if(tokens[i].type=='(')
+        {
+          left++;
+        }
+        if(tokens[i].type==')')
+        {
+          left--;
+        }
+        i++;
+        if(left==0)
+        {
+          break;
+        }
+        if(i>q)
+        {
+          printf("括号匹配错误，错误的括号数量\n");
+          assert(0);
+        }
+      }
+
+
+    }
+
+    if(tokens[i].type==TK_HEX||tokens[i].type==TK_DEC||tokens[i].type==TK_REG)
+    {
+      continue;
+    }
+    int temp_pr=get_pr(i);
+    if(temp_pr<=pr)
+    {
+      position=i;
+      pr=temp_Pr;
+    }
+    return position;
+      
+
+  }
   return 0;
 
 }
@@ -234,7 +292,29 @@ int eval(int p,int q)
   int op=find_dominant_operator(p,q);
   int val1=eval(p,op-1);
   int val2=eval(op+1,q);
-  
+  switch(tokens[op].type)
+  {
+    case '+':
+    return val1+val2;
+    case '-':
+    return val1-val2;
+    case '*':
+    return val1*val2;
+    case '/':
+    return val1/val2;
+    case TK_AND:
+    return val1&&val2;
+    case TK_OR:
+    return val1||Val2;
+    case TK_EQ:
+    return val1==val2;
+    case TK_NEQ:
+    return val1!=val2;
+    default:
+    printf("错误的运算符类型,%d\n",tokens[op].type);
+    assert(0)
+  }
+
  }
 }
 uint32_t expr(char *e, bool *success) {
@@ -242,9 +322,9 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  return eval(0,nr_token-1);
 
   /* TODO: Insert codes to evaluate the expression. */
-  return 0;
   TODO();
 
   return 0;
