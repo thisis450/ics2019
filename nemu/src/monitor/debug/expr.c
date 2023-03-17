@@ -5,7 +5,9 @@
  */
 #include <sys/types.h>
 #include <regex.h>
-
+const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
+const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
+const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
 enum {
   TK_NOTYPE = 256, 
   TK_HEX,
@@ -177,7 +179,7 @@ bool check_parentheses(int p,int q)
   return true;
 }
 
-int get_pr(int n)
+int get_pr(int i)
 {
   if(tokens[i].type=='*'||tokens[i].type=='/')
   return 3;
@@ -231,7 +233,7 @@ int find_dominant_operator(int p,int q)
     if(temp_pr<=pr)
     {
       position=i;
-      pr=temp_Pr;
+      pr=temp_pr;
     }
     return position;
       
@@ -262,7 +264,7 @@ int eval(int p,int q)
       {
         if(strcmp(tokens[p].str,regsl[i])==0)
         return reg_l(i);
-        if(strcmp(tokens[p].str,regsw[i])==0)
+        if(strcmp(tokens[p].str,regsl[i])==0)
         return reg_w(i);
         if(strcmp(tokens[p].str,regsb[i])==0)
         return reg_b(i);
@@ -305,14 +307,14 @@ int eval(int p,int q)
     case TK_AND:
     return val1&&val2;
     case TK_OR:
-    return val1||Val2;
+    return val1||val2;
     case TK_EQ:
     return val1==val2;
     case TK_NEQ:
     return val1!=val2;
     default:
     printf("错误的运算符类型,%d\n",tokens[op].type);
-    assert(0)
+    assert(0);
   }
 
  }
