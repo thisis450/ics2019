@@ -227,7 +227,7 @@ int get_pr(int i)
 }
 int find_dominant_operator(int p,int q)
 {
-  int i=0,left=0,pr=-100,position=p;
+  int i=0,left=0,pr=100,position=p;
   for(i=p;i<=q;i++)
   {
     if(tokens[i].type=='(')
