@@ -113,6 +113,7 @@ static bool make_token(char *e) {
             }
             strncpy(tokens[nr_token].str,substr_start,substr_len);
             *(tokens[nr_token].str+substr_len)='\0';
+            tokens[nr_token].type=TK_DEC;
             nr_token++;
             //printf("%s\n",tokens[nr_token].str);
             break;
@@ -124,6 +125,7 @@ static bool make_token(char *e) {
             }
             strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
             *(tokens[nr_token].str+substr_len-2)='\0';
+            tokens[nr_token].type=TK_HEX;
             nr_token++;
             //printf("%s\n",tokens[nr_token].str);
             break;
@@ -131,6 +133,7 @@ static bool make_token(char *e) {
             strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
             *(tokens[nr_token].str+substr_len-1)='\0';
             //printf("%s\n",tokens[nr_token].str);
+            tokens[nr_token].type=TK_REG;
             nr_token++;
             break;
           case '(':
@@ -290,8 +293,8 @@ uint32_t eval(int p,int q)
     {
       case TK_DEC:
       for (int i=0;i<len;i++) val=val*10+tokens[p].str[i]-'0';
-      printf("%d到%d为10进制，计算结果为%u\n",p,q,val);
-      return 100;
+      Log("%d到%d为10进制，计算结果为%u\n",p,q,val);
+      return val;
       case TK_HEX:
       for (int i=0;i<len;++i) val=val*16+hex_cal(tokens[p].str[i]);
       Log("%d到%d为16进制，计算结果为%u\n",p,q,val);
