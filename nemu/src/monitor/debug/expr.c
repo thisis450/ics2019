@@ -5,9 +5,9 @@
  */
 #include <sys/types.h>
 #include <regex.h>
-const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
-const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
-const char *regsb[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
+const char *regsl_c[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
+const char *regsw_c[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
+const char *regsb_c[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
 enum {
   TK_NOTYPE = 256, 
   TK_HEX,
@@ -262,11 +262,11 @@ int eval(int p,int q)
       case TK_REG:
       for(int i=0;i<8;i++)
       {
-        if(strcmp(tokens[p].str,regsl[i])==0)
+        if(strcmp(tokens[p].str,regsl_c[i])==0)
         return reg_l(i);
-        if(strcmp(tokens[p].str,regsl[i])==0)
+        if(strcmp(tokens[p].str,regsw_c[i])==0)
         return reg_w(i);
-        if(strcmp(tokens[p].str,regsb[i])==0)
+        if(strcmp(tokens[p].str,regsb_c[i])==0)
         return reg_b(i);
         
       }
