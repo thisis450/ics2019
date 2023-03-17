@@ -89,7 +89,8 @@ static int cmd_p(char *args) {
     return 0;
   }
   bool success=true;
-  int val=expr(args,&success);
+  char*arg=strtok(args," ");
+  int val=expr(arg,&success);
   if(success==false)
   {
     return 0;
