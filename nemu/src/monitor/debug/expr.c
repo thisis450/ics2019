@@ -31,7 +31,7 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"[1-9][0-9]*|0",TK_DEC},
+  {"0|[1-9][0-9]*",TK_DEC},
   {"0[xX][0-9A-Fa-f]+",TK_HEX},
   {"\\$(eax|ebx|ecx|edx|esp|ebp|esi|edi|pc|ax|bx|cx|dx|sp|bp|si|di|al|cl|dl|bl|ah|ch|dh|bh)",TK_REG},
   {"==", TK_EQ},
