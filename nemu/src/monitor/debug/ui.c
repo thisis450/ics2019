@@ -114,8 +114,8 @@ static int cmd_x(char *args) {
   }
   //printf("expr为%s\n",expr);
   bool success=true;
-  //vaddr_t expr_result=expr(exprs,&success);
-  vaddr_t expr_result=atoi(expr);
+  vaddr_t expr_result=expr(exprs,&success);
+  //vaddr_t expr_result=atoi(expr);
   if(success==false)
   {
     printf("表达式求解过程中出现了错误\n");

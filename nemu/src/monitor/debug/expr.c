@@ -9,7 +9,6 @@
 enum {
   TK_NOTYPE = 256, 
   TK_DEC,
-  TK_OCT,
   TK_HEX,
   TK_REG,
   TK_EQ,
@@ -33,7 +32,6 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"[1-9][0-9]*|0",TK_DEC},
-  {"0[0-7]+",TK_OCT},
   {"0[xX][0-9A-Fa-f]+",TK_HEX},
   {"\\$(eax|ebx|ecx|edx|esp|ebp|esi|edi|pc|ax|bx|cx|dx|sp|bp|si|di|al|cl|dl|bl|ah|ch|dh|bh)",TK_REG},
   {"==", TK_EQ},
@@ -101,6 +99,32 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
+          case TK_NOTYPE:
+            break;
+          case TK_DEC:
+            if(substr_len>=32)
+            {
+              printf("错误的表达式参数，超过了32字节！\n");
+              return false;
+            }
+            strncpy(tokens[nr_token].str,substr_start,substr_len);
+            *(tokens[nr_token].str+substr_len)="\0";
+            break;
+          case TK_HEX:
+            if(substr_len>=32)
+            {
+              printf("错误的表达式参数，超过了32字节！\n");
+              return false;
+            }
+            strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
+            *(tokens[nr_token].str+substr_len-2)="\0";
+            break;
+          case TK_REG:
+            strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
+            *(tokens[nr_token].str+substr_len-1)="\0";
+            break;
+
+
           default: TODO();
         }
 
