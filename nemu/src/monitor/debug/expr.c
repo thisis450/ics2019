@@ -108,7 +108,7 @@ static bool make_token(char *e) {
             }
             strncpy(tokens[nr_token].str,substr_start,substr_len);
             *(tokens[nr_token].str+substr_len)='\0';
-            printf("%s\n",tokens[nr_token].str);
+            //printf("%s\n",tokens[nr_token].str);
             break;
           case TK_HEX:
             if(substr_len>=32)
@@ -118,12 +118,12 @@ static bool make_token(char *e) {
             }
             strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
             *(tokens[nr_token].str+substr_len-2)='\0';
-            printf("%s\n",tokens[nr_token].str);
+            //printf("%s\n",tokens[nr_token].str);
             break;
           case TK_REG:
             strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
             *(tokens[nr_token].str+substr_len-1)='\0';
-            printf("%s\n",tokens[nr_token].str);
+            //printf("%s\n",tokens[nr_token].str);
             break;
 
 
@@ -142,7 +142,49 @@ static bool make_token(char *e) {
 
   return true;
 }
+bool check_parentheses(int p,int q)
+{
+  if(p>=q)
+  {
+  printf("括号匹配出现了错误,p>=q的情况\n");
+  return false;
+  }
+  if (tokens[p].type!='('||tokens[q].type!=')')
+  {
+    return false;
+  }
+  int un_left=0;
+  for(int i=p;i<=q;i++)
+  {
+    if(tokens[i].type=='(')
+    {
+      un_left++;
+    }
+    if(tokens[i].type==')')
+    {
+      un_left--;
+    }
+    if(un_left==0&&i<q)
+    {
+      return false;
+    }
 
+  }
+  if(un_left!=0)
+  {
+    return false;
+  }
+  return true;
+}
+
+int find_dominant_operator(int p,int q)
+{
+
+}
+int eval(int p,int q)
+{
+  
+}
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
