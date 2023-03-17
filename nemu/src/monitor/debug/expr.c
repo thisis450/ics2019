@@ -276,7 +276,6 @@ int find_dominant_operator(int p,int q)
 }
 int eval(int p,int q)
 {
-  printf("计算表达式，p为%d,q为%d\n",p,q);
   if(p>q)
   {
     printf("表达式计算出现错了，p>q\n");
@@ -288,6 +287,7 @@ int eval(int p,int q)
     {
       case TK_DEC:
       sscanf(tokens[p].str,"%d",&val);
+      printf("%d到%d的计算结果为%d",p,q,val);
       return val;
       case TK_HEX:
       sscanf(tokens[p].str,"%x",&val);
@@ -296,11 +296,17 @@ int eval(int p,int q)
       for(int i=0;i<8;i++)
       {
         if(strcmp(tokens[p].str,regsl_c[i])==0)
-        return reg_l(i);
+        val= reg_l(i);
+        printf("%d到%d的计算结果为%d",p,q,val);
+        return val;
         if(strcmp(tokens[p].str,regsw_c[i])==0)
-        return reg_w(i);
+        val= reg_w(i);
+        printf("%d到%d的计算结果为%d",p,q,val);
+        return val;
         if(strcmp(tokens[p].str,regsb_c[i])==0)
-        return reg_b(i);
+        val= reg_b(i);
+        printf("%d到%d的计算结果为%d",p,q,val);
+        return val;
         
       }
       if(strcmp(tokens[p].str,"pc")==0)
