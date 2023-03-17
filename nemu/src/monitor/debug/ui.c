@@ -134,7 +134,6 @@ static int cmd_x(char *args) {
     printf("表达式求解过程中出现了错误\n");
     return 0;
   }
-  return 0;
   printf("Memory\n");
   for(int i=0;i<N;i++)
   {
