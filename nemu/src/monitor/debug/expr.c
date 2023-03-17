@@ -329,16 +329,16 @@ uint32_t eval(int p,int q)
   else if(check_parentheses(p,q)==true)
   {uint32_t result=0;
      result=eval(p+1,q-1);
-     printf("%d到%d的计算结果为%d\n",p+1,q-1,result);
+     printf("去括号，%d到%d的计算结果为%d\n",p+1,q-1,result);
      return result;
   }
  else
  {
   int op=find_dominant_operator(p,q);
   uint32_t val1=eval(p,op-1);
-  printf("%d到%d的计算结果为%u\n",p,op-1,val1);
+  printf("拆分，%d到%d的计算结果为%u\n",p,op-1,val1);
   uint32_t val2=eval(op+1,q);
-  printf("%d到%d的计算结果为%u\n",op+1,q,val2);
+  printf("拆分，%d到%d的计算结果为%u\n",op+1,q,val2);
   switch(tokens[op].type)
   {
     case '+':
