@@ -8,8 +8,8 @@
 
 enum {
   TK_NOTYPE = 256, 
-  TK_DEC,
   TK_HEX,
+  TK_DEC,
   TK_REG,
   TK_EQ,
   TK_NEQ,
@@ -31,8 +31,8 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"0|[1-9][0-9]*",TK_DEC},
   {"0[xX][0-9A-Fa-f]+",TK_HEX},
+  {"0|[1-9][0-9]*",TK_DEC},
   {"\\$(eax|ebx|ecx|edx|esp|ebp|esi|edi|pc|ax|bx|cx|dx|sp|bp|si|di|al|cl|dl|bl|ah|ch|dh|bh)",TK_REG},
   {"==", TK_EQ},
   {"!=", TK_NEQ},
