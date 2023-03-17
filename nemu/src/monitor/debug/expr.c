@@ -248,6 +248,7 @@ int eval(int p,int q)
   if(p>q)
   {
     printf("表达式计算出现错了，p>q\n");
+    return 0;
     assert(0);
   }
   else if(p==q)
