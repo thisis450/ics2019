@@ -269,10 +269,8 @@ int find_dominant_operator(int p,int q)
       position=i;
       pr=temp_pr;
     }
-    return position;
-      
-
   }
+  return position;
   return 0;
 
 }
