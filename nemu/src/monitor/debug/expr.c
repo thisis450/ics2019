@@ -22,7 +22,10 @@ enum {
   /* TODO: Add more token types */
 
 };
-
+uint32_t hex_cal(char ch)
+{
+	return (('a'<=ch&&ch<='f')?ch-'a'+10:(('A'<=ch&&ch<='F')?ch-'A'+10:ch-'0'));
+}
 static struct rule {
   char *regex;
   int token_type;
@@ -274,7 +277,7 @@ int find_dominant_operator(int p,int q)
   return 0;
 
 }
-int eval(int p,int q)
+uint32_t eval(int p,int q)
 {
   if(p>q)
   {
@@ -282,31 +285,31 @@ int eval(int p,int q)
     assert(0);
   }
   else if(p==q)
-  {int val;
+  {uint32_t val=0,len=strlen(tokens[p].str);
     switch(tokens[p].type)
     {
       case TK_DEC:
-      sscanf(tokens[p].str,"%d",&val);
-      printf("%d到%d的计算结果为%d\n",p,q,val);
+      for (int i=0;i<len;i++) val=val*10+tokens[p].str[i]-'0';
+      printf("%d到%d的计算结果为%u\n",p,q,val);
       return val;
       case TK_HEX:
-      sscanf(tokens[p].str,"%x",&val);
-      printf("%d到%d的计算结果为%x\n",p,q,val);
+      for (int i=0;i<len;++i) val=val*16+hex_cal(tokens[p].str[i]);
+      printf("%d到%d的计算结果为%u\n",p,q,val);
       return val;
       case TK_REG:
       for(int i=0;i<8;i++)
       {
         if(strcmp(tokens[p].str,regsl_c[i])==0)
         val= reg_l(i);
-        printf("%d到%d的计算结果为%d\n",p,q,val);
+        printf("%d到%d的计算结果为%u\n",p,q,val);
         return val;
         if(strcmp(tokens[p].str,regsw_c[i])==0)
         val= reg_w(i);
-        printf("%d到%d的计算结果为%d\n",p,q,val);
+        printf("%d到%d的计算结果为%u\n",p,q,val);
         return val;
         if(strcmp(tokens[p].str,regsb_c[i])==0)
         val= reg_b(i);
-        printf("%d到%d的计算结果为%d\n",p,q,val);
+        printf("%d到%d的计算结果为%u\n",p,q,val);
         return val;
         
       }
