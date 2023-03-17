@@ -291,7 +291,7 @@ uint32_t eval(int p,int q)
       case TK_DEC:
       for (int i=0;i<len;i++) val=val*10+tokens[p].str[i]-'0';
       printf("%d到%d为10进制，计算结果为%u\n",p,q,val);
-      return val;
+      return 100;
       case TK_HEX:
       for (int i=0;i<len;++i) val=val*16+hex_cal(tokens[p].str[i]);
       Log("%d到%d为16进制，计算结果为%u\n",p,q,val);
