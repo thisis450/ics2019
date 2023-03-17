@@ -349,7 +349,8 @@ uint32_t eval(int p,int q)
   {
     uint32_t addr=eval(p+1,q);
     val=vaddr_read(addr,4);
-    Log("拆分，%d到%d的计算结果为解引用结果，结果为%u\n",p,q,val);
+    Log("%d到%d的计算结果为解引用结果，结果为%u\n",p,q,val);
+    return val;
   }
   
   uint32_t val1=eval(p,op-1);
