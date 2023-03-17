@@ -278,19 +278,18 @@ int find_dominant_operator(int p,int q)
 
 }
 uint32_t eval(int p,int q)
-{
+{uint32_t val=0,len=strlen(tokens[p].str);
   if(p>q)
   {
     Log("表达式计算出现错了，p>q\n");
     assert(0);
   }
   else if(p==q)
-  {uint32_t val=0,len=strlen(tokens[p].str);
+  {
     switch(tokens[p].type)
     {
       case TK_DEC:
       for (int i=0;i<len;i++) val=val*10+tokens[p].str[i]-'0';
-      assert(val!=1);
       printf("%d到%d为10进制，计算结果为%u\n",p,q,val);
       return val;
       case TK_HEX:
