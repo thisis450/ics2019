@@ -290,6 +290,7 @@ uint32_t eval(int p,int q)
     {
       case TK_DEC:
       for (int i=0;i<len;i++) val=val*10+tokens[p].str[i]-'0';
+      assert(val!=1);
       printf("%d到%d为10进制，计算结果为%u\n",p,q,val);
       return val;
       case TK_HEX:
