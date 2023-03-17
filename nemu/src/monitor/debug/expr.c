@@ -97,7 +97,6 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-printf("%d\n",rules[i].token_type);
         switch (rules[i].token_type) {
           case TK_NOTYPE:
             break;
@@ -109,6 +108,7 @@ printf("%d\n",rules[i].token_type);
             }
             strncpy(tokens[nr_token].str,substr_start,substr_len);
             *(tokens[nr_token].str+substr_len)='\0';
+            printf("%s\n",tokens[nr_token].str);
             break;
           case TK_HEX:
             if(substr_len>=32)
