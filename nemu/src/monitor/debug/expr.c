@@ -303,17 +303,22 @@ uint32_t eval(int p,int q)
       for(int i=0;i<8;i++)
       {
         if(strcmp(tokens[p].str,regsl_c[i])==0)
-        val= reg_l(i);
+        
+        {val= reg_l(i);
         Log("%d到%d为reg_l计算结果为%u\n",p,q,val);
         return val;
+        }
         if(strcmp(tokens[p].str,regsw_c[i])==0)
-        val= reg_w(i);
+        {
+          val= reg_w(i);
         Log("%d到%d为reg_w计算结果为%u\n",p,q,val);
         return val;
+        }
         if(strcmp(tokens[p].str,regsb_c[i])==0)
-        val= reg_b(i);
+        {val= reg_b(i);
         Log("%d到%d为reg_b计算结果为%u\n",p,q,val);
         return val;
+        }
         
       }
       if(strcmp(tokens[p].str,"pc")==0)
