@@ -108,7 +108,7 @@ static bool make_token(char *e) {
               return false;
             }
             strncpy(tokens[nr_token].str,substr_start,substr_len);
-            *(tokens[nr_token].str+substr_len)="\0";
+            *(tokens[nr_token].str+substr_len)='\0';
             break;
           case TK_HEX:
             if(substr_len>=32)
@@ -117,11 +117,13 @@ static bool make_token(char *e) {
               return false;
             }
             strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
-            *(tokens[nr_token].str+substr_len-2)="\0";
+            *(tokens[nr_token].str+substr_len-2)='\0';
+            printf("%s\n",tokens[nr_token].str);
             break;
           case TK_REG:
             strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
-            *(tokens[nr_token].str+substr_len-1)="\0";
+            *(tokens[nr_token].str+substr_len-1)='\0';
+            printf("%s\n",tokens[nr_token].str);
             break;
 
 
