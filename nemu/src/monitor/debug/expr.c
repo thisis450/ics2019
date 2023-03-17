@@ -304,20 +304,21 @@ uint32_t eval(int p,int q)
       {
         if(strcmp(tokens[p].str,regsl_c[i])==0)
         val= reg_l(i);
-        Log("%d到%d的计算结果为%u\n",p,q,val);
+        Log("%d到%d为reg_l计算结果为%u\n",p,q,val);
         return val;
         if(strcmp(tokens[p].str,regsw_c[i])==0)
         val= reg_w(i);
-        Log("%d到%d的计算结果为%u\n",p,q,val);
+        Log("%d到%d为reg_w计算结果为%u\n",p,q,val);
         return val;
         if(strcmp(tokens[p].str,regsb_c[i])==0)
         val= reg_b(i);
-        Log("%d到%d的计算结果为%u\n",p,q,val);
+        Log("%d到%d为reg_b计算结果为%u\n",p,q,val);
         return val;
         
       }
       if(strcmp(tokens[p].str,"pc")==0)
       {
+        Log("%d到%d为pc计算结果为%u\n",p,q,cpu.pc);
         return cpu.pc;
       }
       else
