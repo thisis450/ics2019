@@ -244,6 +244,7 @@ int find_dominant_operator(int p,int q)
 }
 int eval(int p,int q)
 {
+  printf("计算表达式，p为%d,q为%d\n",p,q);
   if(p>q)
   {
     printf("表达式计算出现错了，p>q\n");
