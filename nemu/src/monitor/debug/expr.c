@@ -344,13 +344,14 @@ uint32_t eval(int p,int q)
   }
  else
  {
-  if(tokens[p].type==TK_DEREF)
+  int op=find_dominant_operator(p,q);
+  if(tokens[op].type==TK_DEREF)
   {
     uint32_t addr=eval(p+1,q);
     val=vaddr_read(addr,4);
     Log("拆分，%d到%d的计算结果为解引用结果，结果为%u\n",p,q,val);
   }
-  int op=find_dominant_operator(p,q);
+  
   uint32_t val1=eval(p,op-1);
   Log("拆分，%d到%d的计算结果为%u\n",p,op-1,val1);
   uint32_t val2=eval(op+1,q);
