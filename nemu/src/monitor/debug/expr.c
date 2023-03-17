@@ -179,11 +179,63 @@ bool check_parentheses(int p,int q)
 
 int find_dominant_operator(int p,int q)
 {
+  return 0;
 
 }
 int eval(int p,int q)
 {
+  if(p>q)
+  {
+    printf("表达式计算出现错了，p>q\n");
+    assert(0);
+  }
+  else if(p==q)
+  {int val;
+    switch(tokens[p].type)
+    {
+      case TK_DEC:
+      sscanf(tokens[p].str,"%d",&val);
+      return val;
+      case TK_HEX:
+      sscanf(tokens[p].str,"%x",&val);
+      return val;
+      case TK_REG:
+      for(int i=0;i<8;i++)
+      {
+        if(strcmp(tokens[p].str,regsl[i])==0)
+        return reg_l(i);
+        if(strcmp(tokens[p].str,regsw[i])==0)
+        return reg_w(i);
+        if(strcmp(tokens[p].str,regsb[i])==0)
+        return reg_b(i);
+        
+      }
+      if(strcmp(tokens[p].str,"pc")==0)
+      {
+        return cpu.pc;
+      }
+      else
+      {
+        printf("错误的寄存器名字%s\n",tokens[p].str);
+        assert(0);
+      }
+      default:
+      printf("expr计算中p=q出错,错误的值类型\n");
+      assert(0);
+    }
+    
+  }
+  else if(check_parentheses(p,q)==true)
+  {
+    return eval(p+1,q-1);
+  }
+ else
+ {
+  int op=find_dominant_operator(p,q);
+  int val1=eval(p,op-1);
+  int val2=eval(op+1,q);
   
+ }
 }
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
