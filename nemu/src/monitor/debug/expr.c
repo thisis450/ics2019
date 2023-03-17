@@ -282,30 +282,31 @@ int eval(int p,int q)
     assert(0);
   }
   else if(p==q)
-  {int val;
+  {uint32_t val;
     switch(tokens[p].type)
     {
       case TK_DEC:
       sscanf(tokens[p].str,"%d",&val);
-      printf("%d到%d的计算结果为%d",p,q,val);
+      printf("%d到%d的计算结果为%d\n",p,q,val);
       return val;
       case TK_HEX:
       sscanf(tokens[p].str,"%x",&val);
+      printf("%d到%d的计算结果为%d\n",p,q,val);
       return val;
       case TK_REG:
       for(int i=0;i<8;i++)
       {
         if(strcmp(tokens[p].str,regsl_c[i])==0)
         val= reg_l(i);
-        printf("%d到%d的计算结果为%d",p,q,val);
+        printf("%d到%d的计算结果为%d\n",p,q,val);
         return val;
         if(strcmp(tokens[p].str,regsw_c[i])==0)
         val= reg_w(i);
-        printf("%d到%d的计算结果为%d",p,q,val);
+        printf("%d到%d的计算结果为%d\n",p,q,val);
         return val;
         if(strcmp(tokens[p].str,regsb_c[i])==0)
         val= reg_b(i);
-        printf("%d到%d的计算结果为%d",p,q,val);
+        printf("%d到%d的计算结果为%d\n",p,q,val);
         return val;
         
       }
@@ -323,14 +324,16 @@ int eval(int p,int q)
     
   }
   else if(check_parentheses(p,q)==true)
-  {
-    return eval(p+1,q-1);
+  {uint32_t result=0;
+     result=eval(p+1,q-1);
+     printf("%d到%d的计算结果为%d\n",p+1,q-1,result);
+     return result;
   }
  else
  {
   int op=find_dominant_operator(p,q);
-  int val1=eval(p,op-1);
-  int val2=eval(op+1,q);
+  uint32_t val1=eval(p,op-1);
+  uint32_t val2=eval(op+1,q);
   switch(tokens[op].type)
   {
     case '+':
