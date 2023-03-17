@@ -83,6 +83,18 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
+  if(args==NULL)
+  {
+    printf("表达式求解缺少参数\n");
+    return 0;
+  }
+  bool success=true;
+  int val=expr(args,&success);
+  if(success==false)
+  {
+    return 0;
+  }
+  printf("%d\n",val);
   return 0;
 }
 
