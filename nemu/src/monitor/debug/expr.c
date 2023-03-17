@@ -108,7 +108,7 @@ static bool make_token(char *e) {
           case TK_DEC:
             if(substr_len>=32)
             {
-              printf("错误的表达式参数，超过了32字节！\n");
+              Log("错误的表达式参数，超过了32字节！\n");
               return false;
             }
             strncpy(tokens[nr_token].str,substr_start,substr_len);
@@ -119,7 +119,7 @@ static bool make_token(char *e) {
           case TK_HEX:
             if(substr_len>=32)
             {
-              printf("错误的表达式参数，超过了32字节！\n");
+              Log("错误的表达式参数，超过了32字节！\n");
               return false;
             }
             strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
@@ -185,7 +185,7 @@ bool check_parentheses(int p,int q)
 {
   if(p>=q)
   {
-  printf("括号匹配出现了错误,p>=q的情况\n");
+  Log("括号匹配出现了错误,p>=q的情况\n");
   return false;
   }
   if (tokens[p].type!='('||tokens[q].type!=')')
@@ -254,7 +254,7 @@ int find_dominant_operator(int p,int q)
         }
         if(i>q)
         {
-          printf("括号匹配错误，错误的括号数量\n");
+          Log("括号匹配错误，错误的括号数量\n");
           assert(0);
         }
       }
@@ -281,7 +281,7 @@ uint32_t eval(int p,int q)
 {
   if(p>q)
   {
-    printf("表达式计算出现错了，p>q\n");
+    Log("表达式计算出现错了，p>q\n");
     assert(0);
   }
   else if(p==q)
@@ -294,22 +294,22 @@ uint32_t eval(int p,int q)
       return val;
       case TK_HEX:
       for (int i=0;i<len;++i) val=val*16+hex_cal(tokens[p].str[i]);
-      printf("%d到%d为16进制，计算结果为%u\n",p,q,val);
+      Log("%d到%d为16进制，计算结果为%u\n",p,q,val);
       return val;
       case TK_REG:
       for(int i=0;i<8;i++)
       {
         if(strcmp(tokens[p].str,regsl_c[i])==0)
         val= reg_l(i);
-        printf("%d到%d的计算结果为%u\n",p,q,val);
+        Log("%d到%d的计算结果为%u\n",p,q,val);
         return val;
         if(strcmp(tokens[p].str,regsw_c[i])==0)
         val= reg_w(i);
-        printf("%d到%d的计算结果为%u\n",p,q,val);
+        Log("%d到%d的计算结果为%u\n",p,q,val);
         return val;
         if(strcmp(tokens[p].str,regsb_c[i])==0)
         val= reg_b(i);
-        printf("%d到%d的计算结果为%u\n",p,q,val);
+        Log("%d到%d的计算结果为%u\n",p,q,val);
         return val;
         
       }
