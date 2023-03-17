@@ -274,7 +274,7 @@ int find_dominant_operator(int p,int q)
   return 0;
 
 }
-int eval(int p,int q)
+uint32_t eval(int p,int q)
 {
   if(p>q)
   {
