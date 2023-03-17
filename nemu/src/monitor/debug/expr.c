@@ -336,9 +336,9 @@ uint32_t eval(int p,int q)
  {
   int op=find_dominant_operator(p,q);
   uint32_t val1=eval(p,op-1);
-  //Log("拆分，%d到%d的计算结果为%u\n",p,op-1,val1);
+  Log("拆分，%d到%d的计算结果为%u\n",p,op-1,val1);
   uint32_t val2=eval(op+1,q);
-  //Log("拆分，%d到%d的计算结果为%u\n",op+1,q,val2);
+  Log("拆分，%d到%d的计算结果为%u\n",op+1,q,val2);
   switch(tokens[op].type)
   {
     case '+':
