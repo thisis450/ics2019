@@ -90,12 +90,12 @@ static int cmd_p(char *args) {
   }
   bool success=true;
   char*arg=strtok(args," ");
-  int val=expr(arg,&success);
+  uint32_t val=expr(arg,&success);
   if(success==false)
   {
     return 0;
   }
-  printf("%d\n",val);
+  printf("%u\n",val);
   return 0;
 }
 
