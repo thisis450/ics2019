@@ -110,6 +110,7 @@ static bool make_token(char *e) {
             }
             strncpy(tokens[nr_token].str,substr_start,substr_len);
             *(tokens[nr_token].str+substr_len)='\0';
+            nr_token++;
             //printf("%s\n",tokens[nr_token].str);
             break;
           case TK_HEX:
@@ -120,14 +121,47 @@ static bool make_token(char *e) {
             }
             strncpy(tokens[nr_token].str,substr_start+2,substr_len-2);
             *(tokens[nr_token].str+substr_len-2)='\0';
+            nr_token++;
             //printf("%s\n",tokens[nr_token].str);
             break;
           case TK_REG:
             strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
             *(tokens[nr_token].str+substr_len-1)='\0';
             //printf("%s\n",tokens[nr_token].str);
+            nr_token++;
             break;
-
+          case '(':
+          tokens[nr_token++].type='(';
+          break;
+          case ')':
+          tokens[nr_token++].type=')';
+          break;
+          case '+':
+          tokens[nr_token++].type='+';
+          break;
+          case '-':
+          tokens[nr_token++].type='-';
+          break;
+          case '*':
+          tokens[nr_token++].type='*';
+          break;
+          case '/':
+          tokens[nr_token++].type='/';
+          break;
+          case TK_EQ:
+          tokens[nr_token++].type=TK_EQ;
+          break;
+          case TK_NEQ:
+          tokens[nr_token++].type=TK_NEQ;
+          break;
+          case TK_AND:
+          tokens[nr_token++].type=TK_AND;
+          break;
+          case TK_OR:
+          tokens[nr_token++].type=TK_OR;
+          break;
+          
+          
 
           //default: TODO();
         }
@@ -244,11 +278,10 @@ int find_dominant_operator(int p,int q)
 }
 int eval(int p,int q)
 {
-  printf("计算表达式，p为%d,q为%d\n",p,q);
+  //printf("计算表达式，p为%d,q为%d\n",p,q);
   if(p>q)
   {
     printf("表达式计算出现错了，p>q\n");
-    return 0;
     assert(0);
   }
   else if(p==q)
@@ -327,7 +360,7 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }
  //printf("nr_token为%d\n",nr_token);
-  return eval(0,strlen(e)-1);
+  return eval(0,nr_token-1);
 
   /* TODO: Insert codes to evaluate the expression. */
   TODO();
