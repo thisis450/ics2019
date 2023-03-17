@@ -16,7 +16,8 @@ enum {
   TK_EQ,
   TK_NEQ,
   TK_AND,
-  TK_OR
+  TK_OR,
+  TK_DEREF
 
 
   /* TODO: Add more token types */
@@ -343,6 +344,12 @@ uint32_t eval(int p,int q)
   }
  else
  {
+  if(tokens[p].type==TK_DEREF)
+  {
+    uint32_t addr=eval(p+1,q);
+    val=vaddr_read(addr,4);
+    Log("拆分，%d到%d的计算结果为解引用结果，结果为%u\n",p,q,val);
+  }
   int op=find_dominant_operator(p,q);
   uint32_t val1=eval(p,op-1);
   Log("拆分，%d到%d的计算结果为%u\n",p,op-1,val1);
@@ -378,11 +385,27 @@ uint32_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  if(tokens[0].type=='*')
+  {
+    tokens[0].type=TK_DEREF;
+  }
+  for(int i=1;i<nr_token;i++)
+{
+  if(
+  tokens[i].type=='*'&&
+  tokens[i-1].type!=TK_HEX&&
+  tokens[i-1].type!=TK_DEC&&
+  tokens[i-1].type!=TK_REG&&
+  tokens[i-1].type!=')'
+  )
+  {
+    tokens[i].type==TK_DEREF;
+  }
+}
  //printf("nr_token为%d\n",nr_token);
   return eval(0,nr_token-1);
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
 
   return 0;
 }
