@@ -313,8 +313,6 @@ int eval(int p,int q)
         assert(0);
       }
       default:
-      printf("expr计算中p=q出错,错误的值类型\n");
-      assert(0);
     }
     
   }
