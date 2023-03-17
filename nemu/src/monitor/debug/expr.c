@@ -326,7 +326,7 @@ uint32_t expr(char *e, bool *success) {
     return 0;
   }
  //printf("nr_token为%d\n",nr_token);
-  return eval(0,strlen(e));
+  return eval(0,strlen(e)-1);
 
   /* TODO: Insert codes to evaluate the expression. */
   TODO();
