@@ -73,6 +73,11 @@ void free_wp(int N)//make wp free and return to the list 'free_'
 	}
 	while (now!=NULL&&now->next->NO!=N) now=now->next;
 	if (now==NULL)return;
+  if(now->NO!=N)
+  {
+    printf("没有编号为%d的监视点\n",N);
+    return;
+  }
 	wp=now->next;
 	now->next=wp->next;
 	wp->next=free_;
@@ -89,8 +94,12 @@ bool check_wp()
        {
         now->hit_num++;
         change=1;
-        Log("监视点%d，表达式%s的值由%u变为了%u\n",now->NO,now->exp,now->old_val,now_val);
+        printf("监视点%d，表达式%s的值由%u变为了%u\n",now->NO,now->exp,now->old_val,now_val);
         now->old_val=now_val;
+       }
+       else
+       {
+  printf("监视点%d，表达式%s的值为%u，未改变\n",now->NO,now->exp,now->old_val);
        }
        
 	}
