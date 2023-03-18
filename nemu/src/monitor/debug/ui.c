@@ -157,7 +157,6 @@ static int cmd_w(char *args) {
     printf("插入检查点缺少参数\n");
     return 0;
   }
-  //char*arg=strtok(args," ");
   WP* temp=new_wp(args);
   if(temp!=NULL)
   {
