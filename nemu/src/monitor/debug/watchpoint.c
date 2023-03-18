@@ -35,6 +35,7 @@ WP* new_wp(char *args)//get a free watchpoint from the list 'free_'
   {
     Log("监视点设置时表达式计算错误\n");
     val=0;
+    return NULL;
   }
 	if (head==NULL)
 	{
@@ -47,7 +48,7 @@ WP* new_wp(char *args)//get a free watchpoint from the list 'free_'
     head->old_val=val;
 		return head;
 	}
-	
+	WP *now=head;
 	while (now->next!=NULL) now=now->next;
 	now->next=free_;
 
@@ -76,4 +77,22 @@ void free_wp(int N)//make wp free and return to the list 'free_'
 	now->next=wp->next;
 	wp->next=free_;
 	free_=wp;
+}
+bool check_wp()
+{
+	bool _suc,change=0;
+  uint32_t now_val;
+	for (WP *now=head;now!=NULL;now=now->next)
+	{
+       now_val=expr(now->exp,&_suc);
+       if (now->old_val!=now_val) 
+       {
+        now->hit_num++;
+        change=1;
+        Log("监视点%d，表达式%s的值由%u变为了%u\n",now->NO,now->exp,now->old_val,now_val);
+        now->old_val=now_val;
+       }
+       
+	}
+	return change;
 }

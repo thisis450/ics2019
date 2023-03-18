@@ -89,8 +89,8 @@ static int cmd_p(char *args) {
     return 0;
   }
   bool success=true;
-  char*arg=strtok(args," ");
-  uint32_t val=expr(arg,&success);
+  //char*arg=strtok(args," ");
+  uint32_t val=expr(args,&success);
   if(success==false)
   {
     return 0;
@@ -152,11 +152,34 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_w(char *args) {
-  return -1;
+    if(args==NULL)
+  {
+    printf("插入检查点缺少参数\n");
+    return 0;
+  }
+  //char*arg=strtok(args," ");
+  WP* temp=new_wp(args);
+  if(temp!=NULL)
+  {
+    printf("插入检查点成功，表达式为%s,目前值为%u，编号为%d\n",temp->exp,temp->old_val,temp->NO);
+  }
+  else
+  {
+    printf("检查点插入失败\n");
+  }
+  return 0;
 }
 
 static int cmd_d(char *args) {
-  return -1;
+      if(args==NULL)
+  {
+    printf("删除检查点缺少参数\n");
+    return 0;
+  }
+  char*arg=strtok(args," ");
+  int N=atoi(arg);
+  free_wp(N);
+  return 0;
 }
 
 static struct {
