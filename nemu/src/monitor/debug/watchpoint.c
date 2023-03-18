@@ -99,9 +99,16 @@ bool check_wp()
        }
        else
        {
-  printf("监视点%d，表达式%s的值为%u，未改变\n",now->NO,now->exp,now->old_val);
+  //printf("监视点%d，表达式%s的值为%u，未改变\n",now->NO,now->exp,now->old_val);
        }
        
 	}
 	return change;
 }
+void print_wp()
+{
+  for (WP*now=head;now!=NULL;now=now->next)
+  {
+    printf("监视点%d, 表达式为%s,  值为%u, hitnum为%d\n",now->NO,now->exp,now->old_val,now->hit_num);
+  }
+};

@@ -75,7 +75,7 @@ static int cmd_info(char *args) {
   }
   if(strcmp(arg,"w")==0)
   {
-    //print_wp();
+    print_wp();
     return 0;
   }
   printf("info命令未输入参数\n");
