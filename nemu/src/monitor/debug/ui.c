@@ -62,7 +62,7 @@ static int cmd_info(char *args) {
   }
   if (strcmp(arg,"r")==0)
   {
-            printf("eax is %x\n",cpu.eax);
+        printf("eax is %x\n",cpu.eax);
         printf("ecx is %x\n",cpu.ecx);
         printf("edx is %x\n",cpu.edx);
         printf("ebx is %x\n",cpu.ebx);
