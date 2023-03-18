@@ -9,10 +9,11 @@ typedef struct watchpoint {
 
   /* TODO: Add more members if necessary */
   char exp[128];
-  uint32 last_val,now_val;
+  uint32_t old_val;
+  int hit_num;
 
 
 } WP;
-WP* new_wp();
-void free_wp(WP *wp);
+WP* new_wp(char *args);
+void free_wp(int N);
 #endif
