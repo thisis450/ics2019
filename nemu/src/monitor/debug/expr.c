@@ -229,7 +229,6 @@ int get_pr(int i)
   if(tokens[i].type==TK_EQ||tokens[i].type==TK_NEQ)
   return 1;
   if(tokens[i].type==TK_AND||tokens[i].type==TK_OR)
-  return 0;
   return 999;
 }
 int find_dominant_operator(int p,int q)
@@ -278,7 +277,6 @@ int find_dominant_operator(int p,int q)
     }
   }
   return position;
-  return 0;
 
 }
 uint32_t eval(int p,int q)

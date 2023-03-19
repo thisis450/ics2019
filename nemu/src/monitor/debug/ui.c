@@ -57,7 +57,7 @@ static int cmd_info(char *args) {
   char* arg=strtok(args," ");
   if(arg==NULL)
   {
-    printf("cmd_info没有参数");
+    printf("cmd_info没有参数\n");
     return 0;
   }
   if (strcmp(arg,"r")==0)
@@ -78,7 +78,7 @@ static int cmd_info(char *args) {
     print_wp();
     return 0;
   }
-  printf("info命令未输入参数\n");
+  printf("info命令未输入正确参数\n");
   return 0;
 }
 
