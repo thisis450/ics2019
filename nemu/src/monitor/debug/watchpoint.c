@@ -94,7 +94,7 @@ bool check_wp()
        {
         now->hit_num++;
         change=1;
-        printf("监视点%d，表达式%s的值由%u变为了%u\n",now->NO,now->exp,now->old_val,now_val);
+        Log("监视点%d，表达式%s的值由%u变为了%u\n",now->NO,now->exp,now->old_val,now_val);
         now->old_val=now_val;
        }
        else

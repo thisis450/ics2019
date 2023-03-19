@@ -337,7 +337,7 @@ uint32_t eval(int p,int q)
   else if(check_parentheses(p,q)==true)
   {uint32_t result=0;
      result=eval(p+1,q-1);
-     printf("去括号，%d到%d的计算结果为%d\n",p+1,q-1,result);
+     Log("去括号，%d到%d的计算结果为%d\n",p+1,q-1,result);
      return result;
   }
  else
