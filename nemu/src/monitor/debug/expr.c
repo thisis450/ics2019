@@ -378,8 +378,8 @@ uint32_t eval(int p,int q)
     printf("错误的运算符类型,%d\n",tokens[op].type);
     assert(0);
   }
-return -1;
  }
+ return -1;
 }
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
