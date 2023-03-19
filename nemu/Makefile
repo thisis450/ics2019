@@ -84,3 +84,8 @@ clean:
 	-rm -rf $(BUILD_DIR)
 	$(MAKE) -C tools/gen-expr clean
 	$(MAKE) -C tools/qemu-diff clean
+	
+COUNT_L := $(shell  find . -name "*.h" -or -name "*.c" | xargs grep -ve "^$$" | wc -l)
+
+count:
+	@echo $(COUNT_L) lines in nemu

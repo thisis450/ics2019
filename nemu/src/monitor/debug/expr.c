@@ -229,6 +229,7 @@ int get_pr(int i)
   if(tokens[i].type==TK_EQ||tokens[i].type==TK_NEQ)
   return 1;
   if(tokens[i].type==TK_AND||tokens[i].type==TK_OR)
+  return 0;
   return 999;
 }
 int find_dominant_operator(int p,int q)
@@ -377,7 +378,7 @@ uint32_t eval(int p,int q)
     printf("错误的运算符类型,%d\n",tokens[op].type);
     assert(0);
   }
-
+return -1;
  }
 }
 uint32_t expr(char *e, bool *success) {
@@ -399,7 +400,7 @@ uint32_t expr(char *e, bool *success) {
   tokens[i-1].type!=')'
   )
   {
-    tokens[i].type==TK_DEREF;
+    tokens[i].type=TK_DEREF;
   }
 }
  //printf("nr_token为%d\n",nr_token);

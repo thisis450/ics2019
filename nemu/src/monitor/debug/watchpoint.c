@@ -31,7 +31,7 @@ WP* new_wp(char *args)//get a free watchpoint from the list 'free_'
 	}
   bool success=true;
   uint32_t val=expr(args,&success);
-  if(success=false)
+  if(success==false)
   {
     Log("监视点设置时表达式计算错误\n");
     val=0;
