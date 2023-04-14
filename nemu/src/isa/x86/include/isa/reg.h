@@ -31,7 +31,8 @@ typedef struct {
 	union{
 		struct{
 			uint32_t CF:1;
-			unsigned :5;
+      unsigned int one:1;
+			unsigned int:4;
 			uint32_t ZF:1;
 			uint32_t SF:1;
 			unsigned :1;
