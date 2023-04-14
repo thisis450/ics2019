@@ -332,6 +332,9 @@ uint32_t eval(int p,int q)
         assert(0);
       }
       default:
+        printf("错误的tokentype%d",tokens[p].type);
+        assert(0);
+
     }
     
   }
