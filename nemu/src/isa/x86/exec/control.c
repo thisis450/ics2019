@@ -33,8 +33,7 @@ make_EHelper(call) {
 }
 
 make_EHelper(ret) {
-  //TODO();
-  printf("retret");
+  TODO();
 	rtl_pop(&decinfo.jmp_pc);
 	rtl_j(decinfo.jmp_pc);
 	print_asm("ret");
