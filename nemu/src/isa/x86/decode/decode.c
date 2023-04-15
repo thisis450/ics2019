@@ -31,20 +31,17 @@ static inline make_DopHelper(SI) {
    *
    op->simm = ???
    */
-	if (op->width == 4) {
-		op->simm = instr_fetch(pc, op->width);
-	}
-	else if (op->width == 2) {
-		op->simm = (int16_t)((uint16_t)instr_fetch(pc, op->width));
-	}
-	else {
-		op->simm = (int16_t)(int8_t)((uint8_t)instr_fetch(pc, op->width));
-	}
+  switch(op->width)
+  {
+	  case 1:{op->simm=(int)((char)instr_fetch(pc,op->width));break;}
+	  case 2:{op->simm=(int)((short)instr_fetch(pc,op->width));break;}
+	  case 4:{op->simm=instr_fetch(pc,op->width);break;}
+	  default:assert(0);
+  }
+
   rtl_li(&op->val, op->simm);
 
-#ifdef DEBUG
-  snprintf(op->str, OP_STR_SIZE, "$0x%x", op->simm);
-#endif
+  print_Dop(op->str, OP_STR_SIZE, "$0x%x", op->simm);
 }
 
 /* I386 manual does not contain this abbreviation.
