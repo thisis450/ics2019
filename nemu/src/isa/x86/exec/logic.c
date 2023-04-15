@@ -2,7 +2,7 @@
 #include "cc.h"
 
 make_EHelper(test) {
-  TODO();
+  //TODO();
   rtl_li(&s1,0);
   rtl_set_OF(&s1);
   rtl_set_CF(&s1);
