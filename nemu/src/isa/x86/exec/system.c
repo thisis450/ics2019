@@ -43,12 +43,18 @@ void pio_write_b(ioaddr_t, uint32_t);
 
 make_EHelper(in) {
   TODO();
-
+  if (id_dest->width==4) s0=pio_read_l(id_src->val);
+  else if (id_dest->width==2) s0=pio_read_w(id_src->val);
+  else s0=pio_read_b(id_src->val);
+  operand_write(id_dest,&s0);
   print_asm_template2(in);
 }
 
 make_EHelper(out) {
   TODO();
-
-  print_asm_template2(out);
+	if (id_dest->width==4)  pio_write_l(id_dest->val,id_src->val);
+	else if (id_dest->width==2)  pio_write_w(id_dest->val,id_src->val);
+	else if (id_dest->width==1) pio_write_b(id_dest->val,id_src->val);
+	else assert(0);
+	print_asm_template2(out);
 }
