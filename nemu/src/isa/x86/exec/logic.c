@@ -9,7 +9,7 @@ make_EHelper(test) {
 
 make_EHelper(and) {
   //TODO();
-    rtl_li(&s1,0);
+  rtl_li(&s1,0);
   rtl_set_OF(&s1);
   rtl_set_CF(&s1);
   rtl_and(&s0,&id_dest->val,&id_src->val);
