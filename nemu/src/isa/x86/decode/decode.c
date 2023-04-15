@@ -26,22 +26,25 @@ static inline make_DopHelper(SI) {
   op->type = OP_TYPE_IMM;
 
   /* TODO: Use instr_fetch() to read `op->width' bytes of memory
-   * pointed by 'pc'. Interpret the result as a signed immediate,
+   * pointed by `eip'. Interpret the result as a signed immediate,
    * and assign it to op->simm.
    *
    op->simm = ???
    */
-  //TODO();
-  switch(op->width)
-  {
-	  case 1:{op->simm=(int)((char)instr_fetch(pc,op->width));break;}
-	  case 2:{op->simm=(int)((short)instr_fetch(pc,op->width));break;}
-	  case 4:{op->simm=instr_fetch(pc,op->width);break;}
-	  default:assert(0);
-  }
+	if (op->width == 4) {
+		op->simm = instr_fetch(pc, op->width);
+	}
+	else if (op->width == 2) {
+		op->simm = (int16_t)((uint16_t)instr_fetch(pc, op->width));
+	}
+	else {
+		op->simm = (int16_t)(int8_t)((uint8_t)instr_fetch(pc, op->width));
+	}
   rtl_li(&op->val, op->simm);
 
-  print_Dop(op->str, OP_STR_SIZE, "$0x%x", op->simm);
+#ifdef DEBUG
+  snprintf(op->str, OP_STR_SIZE, "$0x%x", op->simm);
+#endif
 }
 
 /* I386 manual does not contain this abbreviation.
