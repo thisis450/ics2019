@@ -36,7 +36,7 @@ make_group(gp3,
 
 /* 0xfe */
 make_group(gp4,
-    EXW(inc,1), EMPTY, EMPTY, EMPTY,
+    EXW(inc,1), EXW(dec,1), EMPTY, EMPTY,
     EMPTY, EMPTY, EMPTY, EMPTY)
 
 /* 0xff */
