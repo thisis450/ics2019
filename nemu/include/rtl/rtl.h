@@ -132,12 +132,15 @@ void interpret_rtl_exit(int state, vaddr_t halt_pc, uint32_t halt_ret);
 
 static inline void rtl_not(rtlreg_t *dest, const rtlreg_t* src1) {
   // dest <- ~src1
-  TODO();
+  *dest=~(*src1);
+  //TODO();
 }
 
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- signext(src1[(width * 8 - 1) .. 0])
-  TODO();
+  //TODO();
+  rtl_shli(&t0,src1,32-width*8);
+	rtl_sari(dest,&t0,32-width*8);
 }
 
 static inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
@@ -154,7 +157,14 @@ static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
 
 static inline void rtl_mux(rtlreg_t* dest, const rtlreg_t* cond, const rtlreg_t* src1, const rtlreg_t* src2) {
   // dest <- (cond ? src1 : src2)
-  TODO();
+  //TODO();
+  assert(*cond<=1);
+	rtl_mul_lo(dest,cond,src1);//A=cond*src1
+	t1=1;
+	rtl_sub(&t0,&t1,cond);
+	rtl_mul_lo(&t1,&t0,src2);//B=(1-cond)*src2
+	rtl_add(&t0,dest,&t1);//dest=A+B
+	*dest=t0;
 }
 
 #include "isa/rtl.h"
