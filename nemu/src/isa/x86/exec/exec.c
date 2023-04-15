@@ -112,7 +112,7 @@ static OpcodeEntry opcode_table [512] = {
   /* 0xe4 */	EMPTY, EMPTY, EMPTY, EMPTY,
   /* 0xe8 */	IDEX(J,call), EMPTY, EMPTY, EMPTY,
   /* 0xec */	EMPTY, EMPTY, EMPTY, EMPTY,
-  /* 0xf0 */	EMPTY, EMPTY, EMPTY, IDEX(SI2E,nop),
+  /* 0xf0 */	EMPTY, EMPTY, EMPTY, IDEX(I2E,nop),
   /* 0xf4 */	EMPTY, EMPTY, IDEXW(E, gp3, 1), IDEX(E, gp3),
   /* 0xf8 */	EMPTY, EMPTY, EMPTY, EMPTY,
   /* 0xfc */	EMPTY, EMPTY, IDEXW(E, gp4, 1), IDEX(E, gp5),
