@@ -33,7 +33,7 @@ make_EHelper(call) {
 }
 
 make_EHelper(ret) {
-  TODO();
+  //TODO();
 	 rtl_pop(&t0);
 	decinfo.jmp_pc=t0;
 	decinfo.is_jmp=1;
