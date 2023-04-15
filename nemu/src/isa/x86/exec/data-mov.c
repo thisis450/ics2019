@@ -5,16 +5,18 @@ make_EHelper(mov) {
   print_asm_template2(mov);
 }
 
-make_EHelper(push) {
-  TODO();
-
-  print_asm_template1(push);
+make_EHelper(push)
+{
+	rtl_push(&id_dest->val);
+	print_asm_template1(push);
+  //TODO();
 }
 
 make_EHelper(pop) {
-  TODO();
-
-  print_asm_template1(pop);
+	rtl_pop(&s0);
+	operand_write(id_dest,&s0);
+	print_asm_template1(pop);
+  //TODO();
 }
 
 make_EHelper(pusha) {
