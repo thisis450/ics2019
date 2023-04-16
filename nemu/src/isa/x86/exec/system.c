@@ -42,7 +42,7 @@ void pio_write_w(ioaddr_t, uint32_t);
 void pio_write_b(ioaddr_t, uint32_t);
 
 make_EHelper(in) {
-  TODO();
+  //TODO();
   if (id_dest->width==4) s0=pio_read_l(id_src->val);
   else if (id_dest->width==2) s0=pio_read_w(id_src->val);
   else s0=pio_read_b(id_src->val);
@@ -51,7 +51,7 @@ make_EHelper(in) {
 }
 
 make_EHelper(out) {
-  TODO();
+  //TODO();
 	if (id_dest->width==4)  pio_write_l(id_dest->val,id_src->val);
 	else if (id_dest->width==2)  pio_write_w(id_dest->val,id_src->val);
 	else if (id_dest->width==1) pio_write_b(id_dest->val,id_src->val);
