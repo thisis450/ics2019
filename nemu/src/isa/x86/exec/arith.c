@@ -3,11 +3,15 @@
 make_EHelper(add)
 {//TODO();
 	rtl_add(&s0,&id_dest->val,&id_src->val);
+
 	rtl_update_ZFSF(&s0,id_dest->width);
+
 	rtl_is_add_carry(&s1,&s0,&id_dest->val);
 	rtl_set_CF(&s1);
+
 	rtl_is_add_overflow(&s1,&s0,&id_dest->val,&id_src->val,id_dest->width);
 	rtl_set_OF(&s1);
+
 	operand_write(id_dest,&s0);
 	print_asm_template2(add);
 }
@@ -15,11 +19,15 @@ make_EHelper(add)
 make_EHelper(sub) {
   //TODO();
 	rtl_sub(&s0,&id_dest->val,&id_src->val);
+
 	rtl_update_ZFSF(&s0,id_dest->width);
+
 	rtl_is_sub_carry(&s1,&s0,&id_dest->val);
 	rtl_set_CF(&s1);
+
 	rtl_is_sub_overflow(&s1,&s0,&id_dest->val,&id_src->val,id_dest->width);
 	rtl_set_OF(&s1);
+
 	operand_write(id_dest,&s0);
 	print_asm_template2(sub);
 }
@@ -27,33 +35,45 @@ make_EHelper(sub) {
 make_EHelper(cmp) {
   //TODO();
 	rtl_sub(&s0,&id_dest->val,&id_src->val);
+
 	rtl_update_ZFSF(&s0,id_dest->width);
 	rtl_is_sub_carry(&s1,&s0,&id_dest->val);
+
 	rtl_set_CF(&s1);
 	rtl_is_sub_overflow(&s1,&s0,&id_dest->val,&id_src->val,id_dest->width);
+
 	rtl_set_OF(&s1);
 	print_asm_template2(cmp);
 }
 
 make_EHelper(inc) {
   //TODO();
-	rtl_li(&s1,1);
-  	rtl_add(&s0,&id_dest->val,&s1);
-	rtl_update_ZFSF(&s0,id_dest->width);
-	rtl_is_add_overflow(&s1,&s0,&id_dest->val,&s1,id_dest->width);
+	s0 = 1;
+	rtl_add(&s0, &s0, &id_dest->val);
+
+	rtl_update_ZFSF(&s0, id_dest->width);
+
+	s1 = 1;
+
+	rtl_is_add_overflow(&s1, &s0, &id_dest->val, &s1, id_dest->width);
 	rtl_set_OF(&s1);
-	operand_write(id_dest,&s0);
-	print_asm_template1(inc);
+
+	operand_write(id_dest, &s0);
+  print_asm_template1(inc);
 }
 
 make_EHelper(dec) {
   //TODO();
-	rtl_li(&s1,1);
-	rtl_sub(&s0,&id_dest->val,&s1);
-	rtl_update_ZFSF(&s0,id_dest->width);;
-	rtl_is_sub_overflow(&s1,&s0,&id_dest->val,&s1,id_dest->width);
+	s0 = 1;
+	rtl_sub(&s0, &id_dest->val, &s0);
+
+	rtl_update_ZFSF(&s0, id_dest->width);
+
+	s1 = 1;
+	rtl_is_sub_overflow(&s1, &s0, &id_dest->val, &s1, id_dest->width);
 	rtl_set_OF(&s1);
-	operand_write(id_dest,&s0);
+
+	operand_write(id_dest, &s0);
 	print_asm_template1(dec);
 }
 
