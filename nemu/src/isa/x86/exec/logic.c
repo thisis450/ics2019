@@ -95,4 +95,15 @@ make_EHelper(not) {
   operand_write(id_dest,&s0);
   print_asm_template1(not);
 }
+make_EHelper(rol) {
+  if (id_src->val>8*id_dest->width) assert(0);
+  rtl_shri(&s0,&id_dest->val,8*id_dest->width-id_src->val);
+  rtl_andi(&s0,&s0,(1u<<id_src->val)-1);
+  rtl_shli(&s1,&id_dest->val,id_src->val);
+  rtl_or(&s1,&s1,&s0);
+  operand_write(id_dest,&s1);
+  rtl_andi(&s0,&s0,1);
+  rtl_set_CF(&s0);
+  print_asm_template2(rol);
+}
 
