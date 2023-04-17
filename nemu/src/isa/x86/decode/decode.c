@@ -34,7 +34,6 @@ static inline make_DopHelper(SI) {
 	s0 = instr_fetch(pc, op->width);
 	rtl_sext(&s0, &s0, op->width);
 	op->simm = s0;
-
   rtl_li(&op->val, op->simm);
 
   print_Dop(op->str, OP_STR_SIZE, "$0x%x", op->simm);
