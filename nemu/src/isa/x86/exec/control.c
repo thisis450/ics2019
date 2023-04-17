@@ -27,7 +27,7 @@ make_EHelper(jmp_rm) {
 make_EHelper(call) {
   // the target address is calculated at the decode stage
   //TODO();
-  rtl_push(pc);
+  rtl_push(&decinfo.seq_pc);
   rtl_j(decinfo.jmp_pc);
   print_asm("call %x", decinfo.jmp_pc);
 }
@@ -47,6 +47,19 @@ make_EHelper(ret_imm) {
 
 make_EHelper(call_rm) {
   //TODO();
+  	/*
+	IF r/m16 or r/m32 type of call
+	THEN (* near absolute call *)
+   IF OperandSize = 16
+   THEN
+      Push(IP);
+      EIP := [r/m16] AND 0000FFFFH;
+   ELSE (* OperandSize = 32 *)
+      Push(EIP);
+      EIP := [r/m32];
+   FI;
+	FI;
+	 */
   rtl_li(&s0,id_dest->val);
   rtl_mv(&decinfo.jmp_pc,&s0);
   rtl_push(pc);
