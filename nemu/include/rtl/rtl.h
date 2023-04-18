@@ -17,7 +17,7 @@ static inline void interpret_rtl_li(rtlreg_t* dest, uint32_t imm) {
   *dest = imm;
 }
 
-static void interpret_rtl_mv(rtlreg_t* dest, const rtlreg_t *src1) {
+static inline void interpret_rtl_mv(rtlreg_t* dest, const rtlreg_t *src1) {
   *dest = *src1;
 }
 
