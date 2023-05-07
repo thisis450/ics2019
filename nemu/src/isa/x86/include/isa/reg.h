@@ -48,7 +48,11 @@ typedef struct {
    * in PA2 able to directly access these registers.
    */
  // rtlreg_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-
+	uint32_t cs;
+	struct{
+		uint16_t limit;
+		uint32_t base;
+	}idtr;
   
 
 } CPU_state;
