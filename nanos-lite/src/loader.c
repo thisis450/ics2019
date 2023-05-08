@@ -11,9 +11,10 @@
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
-size_t len=get_ramdisk_size();
-ramdisk_read(DEFAULT_ENTRY,0,len);
-return (uintptr_t)DEFAULT_ENTRY;
+	Elf_Ehdr elf_ehdr;
+	/* read elf-header from ramdisk */
+	ramdisk_read((void *)&elf_ehdr, 0, sizeof(Elf_Ehdr));
+   return elf_ehdr.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
