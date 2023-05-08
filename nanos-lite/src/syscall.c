@@ -9,7 +9,7 @@ _Context* do_syscall(_Context *c) {
 	a[3] = c->GPR4;
 uintptr_t res = 0;
   switch (a[0]) {
-    case SYS_yield: res = sys_yield(); break;
+    case SYS_yield: res = 0; _yield();;break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 c->GPRx = res;
