@@ -45,6 +45,7 @@ _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
 }
 
 void _yield() {
+  printf("_yield\n");
   asm volatile("call *0x100000": : "a"(-1));
 }
 
