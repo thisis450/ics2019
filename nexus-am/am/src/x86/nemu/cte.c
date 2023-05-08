@@ -13,9 +13,23 @@ _Context* __am_irq_handle(_Context *c) {
   if (user_handler) {
     _Event ev = {0};
     switch (c->irq) {
+      case 0x81:
+				ev.event = _EVENT_YIELD;
+			break;
       default: ev.event = _EVENT_ERROR; break;
     }
-
+    printf("irq=%d\n", c->irq);
+    printf("eip=%x\n", c->eip);
+    printf("cs=%x\n", c->cs);
+    printf("eflags=%x\n", c->eflags);
+    printf("edi=%d\n", c->edi);
+    printf("esi=%x\n", c->esi);
+    printf("ebp=%x\n", c->ebp);
+    printf("esp=%x\n", c->esp);
+    printf("ebx=%x\n", c->ebx);
+    printf("edx=%x\n", c->edx);
+    printf("ecx=%x\n", c->ecx);
+    printf("eax=%x\n", c->eax);
     next = user_handler(ev, c);
     if (next == NULL) {
       next = c;
