@@ -1,6 +1,6 @@
 #include "proc.h"
 #include <elf.h>
-
+#define DEFAULT_ENTRY ((void *)0x4000000)
 #ifdef __ISA_AM_NATIVE__
 # define Elf_Ehdr Elf64_Ehdr
 # define Elf_Phdr Elf64_Phdr
@@ -10,8 +10,13 @@
 #endif
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-  TODO();
-  return 0;
+  //TODO();
+	int fd = fs_open(filename, 0, 0);
+	printf("fd = %d\n", fd);
+	fs_read(fd, DEFAULT_ENTRY, fs_filesz(fd)); 
+	fs_close(fd); 
+	
+	return (uintptr_t)DEFAULT_ENTRY;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
