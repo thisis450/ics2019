@@ -28,17 +28,19 @@ make_EHelper(mov_cr2r) {
 }
 
 make_EHelper(int) {
-  TODO();
+	raise_intr(id_dest->val, decinfo.seq_pc);
+	print_asm("int %s", id_dest->str);
 
-  print_asm("int %s", id_dest->str);
-
-  difftest_skip_dut(1, 2);
+	difftest_skip_dut(1, 2);
 }
 
 make_EHelper(iret) {
-  TODO();
+	rtl_pop(&decinfo.jmp_pc);
+	rtl_pop(&cpu.cs);
+	rtl_pop(&cpu.eflags.val);
 
-  print_asm("iret");
+	rtl_j(decinfo.jmp_pc);
+	print_asm("iret");
 }
 
 uint32_t pio_read_l(ioaddr_t);
