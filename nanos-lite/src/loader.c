@@ -1,6 +1,6 @@
 #include "proc.h"
 #include <elf.h>
-#define DEFAULT_ENTRY ((void *)0x3000000)
+#define DEFAULT_ENTRY ((void *)0x4000000)
 #ifdef __ISA_AM_NATIVE__
 # define Elf_Ehdr Elf64_Ehdr
 # define Elf_Phdr Elf64_Phdr
