@@ -12,7 +12,7 @@ uint32_t sys_write(int fd, const void *buf, size_t count){
 	/* only write to stdout or stderr,
 	 * for didn't implement file system yet.
 	 */
-	Log("called write!!\n");
+	//Log("called write!!\n");
 	if(fd == 1 || fd == 2){
 		size_t i;
 		for(i = 0; i < count; i++){
