@@ -15,7 +15,7 @@ RAMDISK_FILE = build/ramdisk.img
 SINGLE_APP = $(NAVY_HOME)/tests/hello
 SINGLE_APP_FILE = $(FSIMG_PATH)/bin/$(notdir $(SINGLE_APP))
 
-.PHONY: update update-ramdisk-single update-ramdisk-fsimg update-fsimg
+.PHONY: update update-ramdisk-fsimg update-ramdisk-fsimg update-fsimg
 
 update-ramdisk-single:
 	$(MAKE) -s -C $(SINGLE_APP) install ISA=$(ISA)

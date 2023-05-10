@@ -11,7 +11,7 @@ uint32_t sys_exit(int state){
 uint32_t sys_write(int fd, const void *buf, size_t count){
 	if(fd == 1 || fd == 2){
 		size_t i;
-		Log("buffer:%s",(char*)buf);
+		//Log("buffer:%s",(char*)buf);
 		for(i = 0; i < count; i++){
 			_putc(((char *)buf)[i]);
 		}

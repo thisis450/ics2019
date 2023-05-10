@@ -36,3 +36,20 @@ static Finfo file_table[] __attribute__((used)) = {
 void init_fs() {
   // TODO: initialize the size of /dev/fb
 }
+
+int fs_open(const char *filename)
+{
+	for (int i = 0; i < NR_FILES; i++){
+		if(strcmp(filename, file_table[i].name)==0){
+      printf("fs_open open file %s, fd: %d\n", filename, i);
+			return i;
+      
+		}
+	}
+	panic("fs_open:no such file named %s",filename);
+	return -1;
+}
+size_t fs_read(int fd)
+{
+  return 0;
+}
