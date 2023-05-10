@@ -36,8 +36,18 @@ static Finfo file_table[] __attribute__((used)) = {
 void init_fs() {
   // TODO: initialize the size of /dev/fb
 }
+size_t fs_filesize(int fd)
+{
+ assert(fd>=0&&fd<NR_FILES);
+ return file_table[fd].size;
+}
+int disk_offset(int fd)
+{
+  assert(fd>=0&&fd<NR_FILES);
+  return file_table[fd].disk_offset;
+}
 
-int fs_open(const char *filename)
+int fs_open(const char *filename,int flags,int mode)
 {
 	for (int i = 0; i < NR_FILES; i++){
 		if(strcmp(filename, file_table[i].name)==0){
@@ -49,7 +59,13 @@ int fs_open(const char *filename)
 	panic("fs_open:no such file named %s",filename);
 	return -1;
 }
-size_t fs_read(int fd)
+size_t fs_read(int fd,void*buf,size_t len)
 {
+  assert(fd>=0&&fd<NR_FILES);
+  if(fd<3)
+  {
+    Log("fs_read:try to open fd%d,system file",fd);
+    return 0;
+  }
   return 0;
 }
