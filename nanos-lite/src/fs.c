@@ -36,6 +36,9 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  	int fd = fs_open("/dev/fb", 0, 0);
+	Finfo * file = &file_table[fd];
+	file->size = sizeof(uint32_t) * screen_height() * screen_width();
 }
 size_t fs_filesize(int fd)
 {
@@ -97,5 +100,25 @@ size_t fs_read(int fd,void*buf,size_t len)
 int fs_close(int fd)
 {
   assert(fd>=0&&fd<NR_FILES);
+  return 0;
+}
+size_t fs_lseek(int fd,size_t offset,int whence)
+{
+  switch(whence)
+  {
+    case SEEK_SET:
+    set_open_offset(fd,offset);
+    return open_offset(fd);
+    case SEEK_CUR:
+    set_open_offset(fd,open_offset(fd)+offset);
+    return open_offset(fd);
+    case SEEK_END:
+    set_open_offset(fd,fs_filesize(fd));
+    return open_offset(fd);
+    default:
+    printf("fs_lseek: whence=%d,unhandled\n",whence);
+		assert(0);
+
+  }
   return 0;
 }
