@@ -7,6 +7,7 @@ typedef struct {
   char *name;
   size_t size;
   size_t disk_offset;
+  size_t open_offset;
   ReadFn read;
   WriteFn write;
 } Finfo;
@@ -41,11 +42,28 @@ size_t fs_filesize(int fd)
  assert(fd>=0&&fd<NR_FILES);
  return file_table[fd].size;
 }
-int disk_offset(int fd)
+size_t disk_offset(int fd)
 {
   assert(fd>=0&&fd<NR_FILES);
   return file_table[fd].disk_offset;
 }
+size_t open_offset(int fd)
+{
+  assert(fd>=0&&fd<NR_FILES);
+  return file_table[fd].open_offset;
+}
+void set_open_offset(int fd,size_t offset)
+{
+  assert(fd>=0&&fd<NR_FILES);
+  if(offset>file_table[fd].size)
+  {
+    offset=file_table[fd].size;
+
+  }
+  file_table[fd].open_offset=offset;
+}
+
+
 
 int fs_open(const char *filename,int flags,int mode)
 {
@@ -67,5 +85,17 @@ size_t fs_read(int fd,void*buf,size_t len)
     Log("fs_read:try to open fd%d,system file",fd);
     return 0;
   }
+  int n=fs_filesize(fd)-open_offset(fd);
+  if(len>n)
+  {
+    len=n;
+  }
+  ramdisk_read(buf,disk_offset(fd)+open_offset(fd),len);
+  set_open_offset(fd,open_offset(fd)+len);
+  return len;
+}
+int fs_close(int fd)
+{
+  assert(fd>=0&&fd<NR_FILES);
   return 0;
 }
