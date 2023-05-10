@@ -63,6 +63,16 @@ return _syscall_(SYS_write, fd, (intptr_t)buf, count);
 }
 
 void *_sbrk(intptr_t increment) {
+  extern end;
+  static uintptr_t probreak=&end;
+  uintptr_t probreak_new=probreak+increment;
+  int r=_syscall_(SYS_brk,probreak_new,0,0);
+  if(r==0)
+  {
+    uintptr_t temp=probreak;
+    probreak=probreak_new;
+    return(void*)temp;
+  }
   return (void *)-1;
 }
 
