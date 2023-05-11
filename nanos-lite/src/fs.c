@@ -122,3 +122,29 @@ size_t fs_lseek(int fd,size_t offset,int whence)
   }
   return 0;
 }
+size_t fs_write(int fd, const void *buf, size_t len)
+{
+	assert(fd >= 0 && fd < NR_FILES);
+	size_t wlen = -1;
+	Finfo file = file_table[fd];
+	if (file.open_offset > file.size){
+		return 0;
+	}
+	if(file.write){
+		wlen = file.write(buf, file.open_offset, len);
+		(&file_table[fd])->open_offset += wlen;
+	}
+	else{
+		size_t base_offset = file.open_offset < 0 ? 0 : file.open_offset;
+		len = file.open_offset < 0 ? len + file.open_offset : len;
+		if(len < 0){
+			return 0;
+		}
+		if(base_offset + len > file.size){
+			len = file.size - base_offset;
+		}
+		wlen = ramdisk_write(buf, file.disk_offset + base_offset, len);
+		(&file_table[fd])->open_offset = base_offset + wlen;
+	}
+	return wlen;
+}
