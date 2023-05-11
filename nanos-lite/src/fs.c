@@ -23,12 +23,18 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
   panic("should not reach here");
   return 0;
 }
-
+size_t std_write(const void *buf, size_t offset, size_t len) {
+  char *p_buf = (char *)buf;
+	for(size_t i = 0; i < len; i++){
+		_putc(p_buf[i]);
+	}
+	return len;
+}
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   {"stdin", 0,  0, 0, invalid_read, invalid_write},
-  {"stdout", 0, 0, 0,invalid_read, invalid_write},
-  {"stderr", 0, 0, 0,invalid_read, invalid_write},
+  {"stdout", 0, 0, 0,invalid_read, std_write},
+  {"stderr", 0, 0, 0,invalid_read, std_write},
 #include "files.h"
 };
 
