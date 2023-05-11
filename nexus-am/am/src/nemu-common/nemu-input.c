@@ -12,7 +12,7 @@ size_t __am_input_read(uintptr_t reg, void *buf, size_t size) {
 	if (key_code&0x8000) 
   kbd->keydown = 1;
 	else kbd->keydown=0;
-	kbd->keycode = (key_code);
+	kbd->keycode = key_code;
       return sizeof(_DEV_INPUT_KBD_t);
     }
   }
