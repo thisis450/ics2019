@@ -8,17 +8,6 @@ uint32_t sys_yield(){
 uint32_t sys_exit(int state){
 	_halt(state);
 }
-uint32_t sys_write(int fd, const void *buf, size_t count){
-	if(fd == 1 || fd == 2){
-		size_t i;
-		//Log("buffer:%s",(char*)buf);
-		for(i = 0; i < count; i++){
-			_putc(((char *)buf)[i]);
-		}
-	}
-	return count;
-	return fs_write(fd, buf, count);
-}
 uint32_t sys_brk(int addr)
 {
 	return 0;
@@ -49,7 +38,7 @@ uintptr_t res = 0;
 		case SYS_brk: res=sys_brk(a[1]); break;
 		case SYS_open: res = sys_open((const char *)a[1], a[2]); break;
 		case SYS_read: res = sys_read(a[1], (void *)a[2], a[3]); break;
-		case SYS_write: res = sys_write(a[1], (void *)a[2], a[3]); break;
+		case SYS_write: res = fs_write((int)a[1],(const void *)a[2],(size_t)a[3]); break;
 		case SYS_close: res = sys_close(a[1]); break;
 		case SYS_lseek: res = sys_lseek(a[1], a[2], a[3]); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
