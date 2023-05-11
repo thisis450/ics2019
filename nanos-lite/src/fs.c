@@ -36,7 +36,7 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
-  	int fd = fs_open("/dev/fb", 0, 0);
+  	int fd = fs_open("/bin/text", 0, 0);
 	Finfo * file = &file_table[fd];
 	file->size = sizeof(uint32_t) * screen_height() * screen_width();
 }
