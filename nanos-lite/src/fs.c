@@ -83,6 +83,7 @@ int fs_open(const char *filename,int flags,int mode)
 size_t fs_read(int fd,void*buf,size_t len)
 {
   assert(fd>=0&&fd<NR_FILES);
+  Log("fs_read:try to open fd%d",fd);
   if(fd<3)
   {
     Log("fs_read:try to open fd%d,system file",fd);
