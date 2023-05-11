@@ -47,8 +47,12 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   {"stdin", 0, 0, 0, invalid_read, invalid_write},
-  {"stdout", 0, 0, 0, invalid_read, serial_write},
-  {"stderr", 0, 0, 0, invalid_read, serial_write},
+  {"stdout", 0, 0, 0, invalid_read, invalid_write},
+  {"stderr", 0, 0, 0, invalid_read, invalid_write},
+	{"/dev/events", 0, 0, 0, events_read, invalid_write},
+  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
+  {"/dev/fbsync", 0, 0, 0, invalid_read, fbsync_write},
+  {"/proc/dispinfo", 128, 0, 0, dispinfo_read, invalid_write}, /* important to set size <- 128, to ensure fgetc() in ndl.c works */
 #include "files.h"
 };
 
@@ -56,7 +60,9 @@ static Finfo file_table[] __attribute__((used)) = {
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
-
+	int fd = fs_open("/dev/fb", 0, 0);
+	Finfo * file = &file_table[fd];
+	file->size = sizeof(uint32_t) * screen_height() * screen_width();
 }
 
 int fs_open(const char *pathname, int flags, int mode){
