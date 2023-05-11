@@ -23,18 +23,12 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
   panic("should not reach here");
   return 0;
 }
-size_t std_write(const void *buf, size_t offset, size_t len) {
-  char *p_buf = (char *)buf;
-	for(size_t i = 0; i < len; i++){
-		_putc(p_buf[i]);
-	}
-	return len;
-}
+
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   {"stdin", 0,  0, 0, invalid_read, invalid_write},
-  {"stdout", 0, 0, 0,invalid_read, std_write},
-  {"stderr", 0, 0, 0,invalid_read, std_write},
+  {"stdout", 0, 0, 0,invalid_read, invalid_write},
+  {"stderr", 0, 0, 0,invalid_read, invalid_write},
 #include "files.h"
 };
 
@@ -131,6 +125,15 @@ size_t fs_lseek(int fd,size_t offset,int whence)
 }
 size_t fs_write(int fd, const void *buf, size_t len)
 {
+  	// Log("called write!!\n");
+	if(fd == 1 || fd == 2){
+		size_t i;
+		for(i = 0; i < len; i++){
+			_putc(((char *)buf)[i]);
+		}
+    return len;
+	}
+	
 	size_t ret;
 	if (file_table[fd].write!=NULL)
 		ret=file_table[fd].write(buf,file_table[fd].open_offset,len);
