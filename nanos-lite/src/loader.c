@@ -42,7 +42,6 @@
 static uintptr_t loader(PCB *pcb, const char *filename)
 {
   //TODO();
-  Log("loadfile%s\n",filename);
   int fd = fs_open(filename, 0, 0);
   unsigned char buf[2048];
   Elf_Ehdr elf_head;
