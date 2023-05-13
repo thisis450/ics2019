@@ -153,19 +153,19 @@ size_t fs_write(int fd, const void *buf, size_t len)
 	// 	}
   //   return len;
 	// }
-	
-	size_t ret;
+  size_t ret;
+	int n=fs_filesize(fd)-open_offset(fd);
+    if(len>n)
+  {
+    len=n;
+  }
 	if (file_table[fd].write!=NULL)
 		ret=file_table[fd].write(buf,file_table[fd].open_offset,len);
 	else
 	{
-		size_t true_len;
-		if (file_table[fd].open_offset+len<file_table[fd].size)
-			true_len=len;
-		else
-			true_len=file_table[fd].size-file_table[fd].open_offset;
-		ret=ramdisk_write(buf,file_table[fd].disk_offset+file_table[fd].open_offset,true_len);
+
+		ret=ramdisk_write(buf,disk_offset(fd)+open_offset(fd),len);
 	}
-	file_table[fd].open_offset+=ret;
+	set_open_offset(fd,open_offset(fd)+len);
 	return ret;
 }
