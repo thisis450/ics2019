@@ -151,26 +151,31 @@ size_t fs_lseek(int fd,size_t offset,int whence)
 }
 size_t fs_write(int fd, const void *buf, size_t len)
 {
-	// if(fd == 1 || fd == 2){
-	// 	size_t i;
-	// 	for(i = 0; i < len; i++){
-	// 		_putc(((char *)buf)[i]);
-	// 	}
-  //   return len;
-	// }
-	
-	size_t ret;
-	if (file_table[fd].write!=NULL)
-		ret=file_table[fd].write(buf,file_table[fd].open_offset,len);
-	else
-	{
-		size_t true_len;
-		if (file_table[fd].open_offset+len<file_table[fd].size)
-			true_len=len;
-		else
-			true_len=file_table[fd].size-file_table[fd].open_offset;
-		ret=ramdisk_write(buf,file_table[fd].disk_offset+file_table[fd].open_offset,true_len);
+	assert(fd >= 0 && fd < NR_FILES);
+	size_t wlen = -1;
+	Finfo file = file_table[fd];
+	if (file.open_offset > file.size){
+		printf("[fs_write failed] file %d current open offset %lu> file size %lu.\n", fd, file.open_offset, file.size);
+		return 0;
 	}
-	file_table[fd].open_offset+=ret;
-	return ret;
+	if(file.write){
+		wlen = file.write(buf, file.open_offset, len);
+		(&file_table[fd])->open_offset += wlen;
+	}
+	else{
+		/* set correct base offset */
+		size_t base_offset = file.open_offset < 0 ? 0 : file.open_offset;
+		len = file.open_offset < 0 ? len + file.open_offset : len;
+		if(len < 0){
+			return 0;
+		}
+		if(base_offset + len > file.size){
+			len = file.size - base_offset;
+		}
+		/* write via ramdisk API */
+		wlen = ramdisk_write(buf, file.disk_offset + base_offset, len);
+		/* update open offset */
+		(&file_table[fd])->open_offset = base_offset + wlen;
+	}
+	return wlen;
 }
