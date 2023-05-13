@@ -133,10 +133,14 @@ return 0;
 }
 size_t fs_write(int fd,void*buf,size_t len)
 {
-  if(fd<3||fd==FD_DISPINFO)
+  if(fd<1||fd==FD_DISPINFO)
   {
     Log("fs_write wrong fd=%d\n",fd);
     return 0;
+  }
+  if(fd=FD_STDOUT||fd==FD_STDERR)
+  {
+    serial_write(buf,0,len);
   }
   int n=fs_filesz(fd)-get_open_offset(fd);
     if(n>len)
