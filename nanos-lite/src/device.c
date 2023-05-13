@@ -28,16 +28,16 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 		if(key & 0x8000)
     {
 			key = key ^ 0x8000;
-			sprintf(str, "kd %s\n", keyname[key]);
+			Log( "kd %s\n", keyname[key]);
 		}
 		else
     {
-			sprintf(str, "ku %s\n", keyname[key]);
+			Log("ku %s\n", keyname[key]);
 		}
 	}
 	else
   {
-		sprintf(str, "t %u\n", uptime());
+		Log("t %u\n", uptime());
 	}
 	return strlen(str);
 }
