@@ -38,7 +38,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	}
 	else
   {		//Log("time_event\n");
-  Log("time is %d",uptime());
+  //Log("time is %d",uptime());
 		sprintf(buf, "t %d\n", uptime());
 		//Log("buf now is %s\n",buf);
 	}
