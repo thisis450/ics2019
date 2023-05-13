@@ -113,30 +113,28 @@ size_t fs_write(int fd, const void *buf, size_t len)
 
 size_t fs_lseek(int fd, size_t offset, int whence)
 {
-	printf("[fs_lseek] try to seek fd %d, offset: %lu, whence: %d\n", fd, offset, whence);
+	Log("fs_lseek,whence=%d\n",whence);
 	assert(fd < NR_FILES && fd > FD_STDERR);
 	Finfo *file = &file_table[fd];
-	size_t ret = -1;
-	if(whence == SEEK_SET){
-		file->open_offset = offset;
-		ret = offset;
-	}
-	/* file offset is set to its current location plus offset bytes */
-	else if(whence == SEEK_CUR){
-		file->open_offset += offset;
-		ret = file->open_offset;
-	}
-	/* file offset is set to the size of the file plus offset bytes */
-	else if(whence == SEEK_END){
-		file->open_offset = file->size + offset;
-		ret = file->open_offset;
-	}
-	/* should not reach here! */
-	else{
-		printf("[fs_lseek] should not reach here.\n");
+  switch (whence){
+  case SEEK_CUR:
+    file->open_offset += offset;
+		return  file->open_offset;
+  break;
+  case SEEK_SET:
+  		file->open_offset = offset;
+		return file->open_offset;
+    break;
+  case SEEK_END:
+  		file->open_offset = file->size + offset;
+		return file->open_offset;
+    break;
+  default:
+  		Log("fs_lseek wrong whence=%d\n",whence);
 		assert(0);
-	}
-	return ret;
+  break;
+  }
+  return 0;
 }
 
 int fs_close(int fd)
