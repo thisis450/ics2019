@@ -1,9 +1,11 @@
 #include "common.h"
 #include <amdev.h>
+#define KEYDOWN_MASK 0x8000
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
+  char *p_buf = (char *)buf;
 	for(size_t i = 0; i < len; i++){
-		_putc(((char *)buf)[i]);
+		_putc(p_buf[i]);
 	}
 	return len;
 }
@@ -17,51 +19,43 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t events_read(void *buf, size_t offset, size_t len) {
-	//Log("evetns_read\n");
-  int key = read_key();
-
-  //Log("read_key suceesss\n");
-  //Log("key is%d\n",key);
-	if(key != _KEY_NONE)
-  {		//Log("key_event\n");
-		if(key & 0x8000)
-    {
-			key = key ^ 0x8000;
-			sprintf(buf, "kd %s\n", keyname[key]);
-			//Log("buf now is %s\n",buf);
+  int keycode = read_key();
+	/* handle keyboard event */
+	if(keycode != _KEY_NONE){
+		/* key down */
+		if(keycode & KEYDOWN_MASK){
+			keycode = keycode ^ KEYDOWN_MASK;
+			sprintf(buf, "kd %s\n", keyname[keycode]);
 		}
-		else
-    {
-			sprintf(buf, "ku %s\n", keyname[key]);
-			//Log("buf now is %s\n",buf);
+		/* key up */
+		else{
+			sprintf(buf, "ku %s\n", keyname[keycode]);
 		}
 	}
-	else
-  {		//Log("time_event\n");
-  //Log("time is %d",uptime());
-		sprintf(buf, "t %d\n", uptime());
-		//Log("buf now is %s\n",buf);
+	/* timer event */
+	else{
+		sprintf(buf, "t %u\n", uptime());
 	}
-	//Log("finish events_read\n");
 	return strlen(buf);
 }
 
 static char dispinfo[128] __attribute__((used)) = {};
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
-	Log("[displayinfo_read] try to read offset: %d, and len: %d.\n", offset, len);
-    strncpy((char *)buf, dispinfo + offset, len);
+	printf("[displayinfo_read] try to read offset: %lu, and len: %lu.\n", offset, len);
+  strncpy((char *)buf, dispinfo + offset, len);
 	return len;
 }
 
+#define UINT_SZ 4
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-  	Log("[fb_write] try to write offset: %d, and size: %d.\n", offset, len);
+	Log("[fb_write] try to write offset: %lu, and size: %lu.\n", offset, len);
 	/* write the len bytes from buf to the screen(offset -> coord) */
 	/* calc w from len */
-	int w = len / 4;
+	int w = len / UINT_SZ;
 	int h = 1;
 	/* convert to int unit offset */
-	offset = offset / 4;
+	offset = offset / UINT_SZ;
 	int x = offset % screen_width();
 	int y = offset / screen_width();
 	draw_rect((uint32_t *)buf, x, y, w, h);
@@ -69,8 +63,8 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
 }
 
 size_t fbsync_write(const void *buf, size_t offset, size_t len) {
-draw_sync();
-  return 0;
+  draw_sync();
+	return 0;
 }
 
 void init_device() {
@@ -79,7 +73,13 @@ void init_device() {
 
   // TODO: print the string to array `dispinfo` with the format
   // described in the Navy-apps convention
-  memset(dispinfo, 0, 128 * sizeof(char));
-  sprintf(dispinfo, "WIDTH:%d\nHEIGHT:%d\n", screen_width(), screen_height());
-  Log("dispinfo:\n%s\n", dispinfo);
+
+	/* VERY IMPORTANT!!
+	 * we should init dispinfo -> 0 first, to ensure fgetc() in ndl.c works well
+	 */
+	memset(dispinfo, 0, 128 * sizeof(char));
+	sprintf(dispinfo, "WIDTH:%d\nHEIGHT:%d\n", screen_width(), screen_height());
+	printf("dispinfo:\n%s\n", dispinfo);
 }
+
+
