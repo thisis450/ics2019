@@ -115,6 +115,7 @@ return 0;
   {
     return events_read(buf,0,len);
   }
+ 
   int n=fs_filesz(fd)-get_open_offset(fd);
   if(n>len)
   {
@@ -137,6 +138,10 @@ size_t fs_write(int fd,void*buf,size_t len)
   {
     Log("fs_write wrong fd=%d\n",fd);
     return 0;
+  }
+   if(fd==FD_FBSYNC)
+  {
+    return fbsync_write(buf,0,len);
   }
   if(fd=FD_STDOUT||fd==FD_STDERR)
   {
