@@ -21,6 +21,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 	char str[20];
 	bool down=false;
   int key = read_key();
+  Log("read_key success");
   
 	if(key != _KEY_NONE)
   {
