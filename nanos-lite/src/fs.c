@@ -113,7 +113,7 @@ size_t fs_write(int fd, const void *buf, size_t len)
 
 size_t fs_lseek(int fd, size_t offset, int whence)
 {
-	Log("fs_lseek,whence=%d\n",whence);
+	//Log("fs_lseek,whence=%d\n",whence);
 	assert(fd < NR_FILES && fd > FD_STDERR);
 	Finfo *file = &file_table[fd];
   switch (whence){
