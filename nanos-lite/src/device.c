@@ -17,7 +17,7 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t events_read(void *buf, size_t offset, size_t len) {
-	sprintf(buf,"events_read\n");
+	Log("evetns_read\n");
   int key = read_key();
   
 	if(key != _KEY_NONE)
