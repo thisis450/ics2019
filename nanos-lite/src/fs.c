@@ -12,7 +12,7 @@ typedef struct {
   WriteFn write;
 } Finfo;
 
-enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB,FD_EVENTS,FD_FBSYNC,FD_DISPINFO};
+enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB,FD_EVENTS};
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
@@ -92,29 +92,20 @@ size_t fs_read(int fd,void*buf,size_t len)
 {
   assert(fd>=0&&fd<NR_FILES);
   //Log("fs_read:try to open fd%d",fd);
-  if(fd<3||fd==FD_FB)
+  if(fd<3)
   {
     //Log("fs_read:try to open fd%d,system file",fd);
     return 0;
   }
-    if(fd==FD_EVENTS)
+  if(fd==FD_EVENTS)
   {
     return events_read(buf,0,len);
   }
-    int n=fs_filesize(fd)-open_offset(fd);
-    if(len>n)
+  int n=fs_filesize(fd)-open_offset(fd);
+  if(len>n)
   {
     len=n;
   }
- 
-   if(fd==FD_DISPINFO)
-   {
-    dispinfo_read(buf,open_offset(fd),len);
-    set_open_offset(fd,open_offset(fd)+len);
-    return len;
-   }
-
-  
   ramdisk_read(buf,disk_offset(fd)+open_offset(fd),len);
   set_open_offset(fd,open_offset(fd)+len);
   return len;
@@ -153,21 +144,19 @@ size_t fs_write(int fd, const void *buf, size_t len)
 	// 	}
   //   return len;
 	// }
-  size_t ret;
-	int n=fs_filesize(fd)-open_offset(fd);
-    if(len>n)
-  {
-    len=n;
-  }
+	
+	size_t ret;
 	if (file_table[fd].write!=NULL)
-  {
 		ret=file_table[fd].write(buf,file_table[fd].open_offset,len);
-  }
 	else
 	{
-
-		ret=ramdisk_write(buf,disk_offset(fd)+open_offset(fd),len);
+		size_t true_len;
+		if (file_table[fd].open_offset+len<file_table[fd].size)
+			true_len=len;
+		else
+			true_len=file_table[fd].size-file_table[fd].open_offset;
+		ret=ramdisk_write(buf,file_table[fd].disk_offset+file_table[fd].open_offset,true_len);
 	}
-	set_open_offset(fd,open_offset(fd)+len);
+	file_table[fd].open_offset+=ret;
 	return ret;
 }
