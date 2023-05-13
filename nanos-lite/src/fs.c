@@ -91,7 +91,7 @@ size_t fs_write(int fd, const void *buf, size_t len)
 	assert(fd >= 0 && fd < NR_FILES);
 	size_t wlen = -1;
 	if (file_table[fd].open_offset > file_table[fd].size){
-		Log("fs_write out of size\n");
+		//Log("fs_write out of size\n");
 		return 0;
 	}
 	if(file_table[fd].write){
