@@ -43,53 +43,33 @@ static Finfo file_table[] __attribute__((used)) = {
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
 
 void init_fs() {
-  // // TODO: initialize the size of /dev/fb
-  	int fd = fs_open("/bin/text", 0, 0);
+  // TODO: initialize the size of /dev/fb
+	int fd = fs_open("/dev/fb", 0, 0);
 	Finfo * file = &file_table[fd];
 	file->size = sizeof(uint32_t) * screen_height() * screen_width();
 }
-size_t fs_filesize(int fd)
-{
- assert(fd>=0&&fd<NR_FILES);
- return file_table[fd].size;
-}
-size_t disk_offset(int fd)
-{
-  assert(fd>=0&&fd<NR_FILES);
-  return file_table[fd].disk_offset;
-}
-size_t open_offset(int fd)
-{
-  assert(fd>=0&&fd<NR_FILES);
-  return file_table[fd].open_offset;
-}
-void set_open_offset(int fd,size_t offset)
-{
-  assert(fd>=0&&fd<NR_FILES);
-  if(offset>file_table[fd].size)
-  {
-    offset=file_table[fd].size;
 
-  }
-  file_table[fd].open_offset=offset;
-}
+int fs_open(const char *pathname, int flags, int mode){
+	/* Treat the casen that fs_open didn't find the pathname as exception,
+	 * For simplify, we don't need to care flags & mode
+	 */
 
-
-
-int fs_open(const char *filename,int flags,int mode)
-{
+	/* try to find the filename */
+	int fd = -1;
 	for (int i = 0; i < NR_FILES; i++){
-		if(strcmp(filename, file_table[i].name)==0){
-      Log("fs_open open file %s, fd: %d\n", filename, i);
-			return i;
-      
+		if(!strcmp(pathname, file_table[i].name)){
+			fd = i;
+			/* init open offset */
+			file_table[i].open_offset = 0;
+			break;
 		}
 	}
-	panic("fs_open:no such file named %s",filename);
-	return -1;
+	assert(fd >= 0);
+	printf("[fs_open] tried to open file %s, fd: %d\n", pathname, fd);
+	return fd;
 }
-size_t fs_read(int fd,void*buf,size_t len)
-{
+
+size_t fs_read(int fd, void *buf, size_t len){
 	assert(fd >= 0 && fd < NR_FILES);
 	/* operate reading via ramdisk APIs */
 	Finfo file = file_table[fd];
@@ -124,38 +104,7 @@ size_t fs_read(int fd,void*buf,size_t len)
 	}
 	return rlen;
 }
-int fs_close(int fd)
-{
-  assert(fd>=0&&fd<NR_FILES);
-  return 0;
-}
-size_t fs_lseek(int fd,size_t offset,int whence)
-{
-	printf("[fs_lseek] try to seek fd %d, offset: %lu, whence: %d\n", fd, offset, whence);
-	assert(fd < NR_FILES && fd > FD_STDERR);
-	Finfo *file = &file_table[fd];
-	size_t ret = -1;
-	if(whence == SEEK_SET){
-		file->open_offset = offset;
-		ret = offset;
-	}
-	/* file offset is set to its current location plus offset bytes */
-	else if(whence == SEEK_CUR){
-		file->open_offset += offset;
-		ret = file->open_offset;
-	}
-	/* file offset is set to the size of the file plus offset bytes */
-	else if(whence == SEEK_END){
-		file->open_offset = file->size + offset;
-		ret = file->open_offset;
-	}
-	/* should not reach here! */
-	else{
-		printf("[fs_lseek] should not reach here.\n");
-		assert(0);
-	}
-	return ret;
-}
+
 size_t fs_write(int fd, const void *buf, size_t len)
 {
 	assert(fd >= 0 && fd < NR_FILES);
@@ -186,3 +135,37 @@ size_t fs_write(int fd, const void *buf, size_t len)
 	}
 	return wlen;
 }
+
+size_t fs_lseek(int fd, size_t offset, int whence)
+{
+	printf("[fs_lseek] try to seek fd %d, offset: %lu, whence: %d\n", fd, offset, whence);
+	assert(fd < NR_FILES && fd > FD_STDERR);
+	Finfo *file = &file_table[fd];
+	size_t ret = -1;
+	if(whence == SEEK_SET){
+		file->open_offset = offset;
+		ret = offset;
+	}
+	/* file offset is set to its current location plus offset bytes */
+	else if(whence == SEEK_CUR){
+		file->open_offset += offset;
+		ret = file->open_offset;
+	}
+	/* file offset is set to the size of the file plus offset bytes */
+	else if(whence == SEEK_END){
+		file->open_offset = file->size + offset;
+		ret = file->open_offset;
+	}
+	/* should not reach here! */
+	else{
+		printf("[fs_lseek] should not reach here.\n");
+		assert(0);
+	}
+	return ret;
+}
+
+int fs_close(int fd)
+{
+	return 0;
+}
+
