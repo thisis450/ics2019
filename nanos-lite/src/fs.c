@@ -65,10 +65,14 @@ size_t fs_read(int fd, void *buf, size_t len)
 	else
 		true_len=file_table[fd].size-file_table[fd].open_offset;
 	size_t ret;
-	if (file_table[fd].read==NULL)
-		ret=ramdisk_read(buf,file_table[fd].disk_offset+file_table[fd].open_offset,true_len);
+	if (file_table[fd].read!=NULL)
+  {
+    ret=file_table[fd].read(buf,file_table[fd].open_offset,true_len);
+  }	
 	else
-		ret=file_table[fd].read(buf,file_table[fd].open_offset,true_len);
+  {
+		ret=ramdisk_read(buf,file_table[fd].disk_offset+file_table[fd].open_offset,true_len);
+  }
 	file_table[fd].open_offset+=ret;
 	//if (file_table[fd].open_offset==4548) while(1);
 	return ret;
@@ -77,8 +81,9 @@ size_t fs_write(int fd,const void *buf,size_t len)
 {
 	
 	size_t ret;
-	if (file_table[fd].write!=NULL)
+	if (file_table[fd].write!=NULL){
 		ret=file_table[fd].write(buf,file_table[fd].open_offset,len);
+  }
 	else
 	{
 		size_t true_len;
@@ -95,20 +100,29 @@ size_t fs_write(int fd,const void *buf,size_t len)
 int fs_close(int fd)
 {
 	//TODO();
-	file_table[fd].open_offset=0;return 0;
+	return 0;
 }
-size_t get_disk_offset(int fd){return file_table[fd].disk_offset;}
-size_t get_f_size(int fd){return file_table[fd].size;}
 size_t fs_lseek(int fd,size_t offset,int whence)
 {
 	switch (whence)
 	{
-		case SEEK_SET:file_table[fd].open_offset=offset;break;
-		case SEEK_CUR:file_table[fd].open_offset+=offset;break;
-		case SEEK_END:file_table[fd].open_offset=file_table[fd].size+offset;break;
-		default:return -1;
+		case SEEK_SET:
+    file_table[fd].open_offset=offset;
+    break;
+		case SEEK_CUR:
+    file_table[fd].open_offset+=offset;
+    break;
+		case SEEK_END:
+    file_table[fd].open_offset=file_table[fd].size+offset;
+    break;
+		default:
+    Log("wrong whence=%d\n",whence);
+    return -1;
 	}
-	if (file_table[fd].open_offset>file_table[fd].size) file_table[fd].open_offset=file_table[fd].size;
+	if (file_table[fd].open_offset>file_table[fd].size)
+  { 
+  file_table[fd].open_offset=file_table[fd].size;
+  }
 	return file_table[fd].open_offset;
 }
 void init_fs() {
