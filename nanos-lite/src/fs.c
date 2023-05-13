@@ -35,8 +35,8 @@ static Finfo file_table[] __attribute__((used)) = {
   {"stderr", 0, 0, 0,invalid_read, serial_write},
   {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
   {"/dev/events", 0, 0, 0, events_read, invalid_write},
-  //{"/dev/fbsync", 0, 0, 0, invalid_read, fbsync_write},
-  //{"/proc/dispinfo", 128, 0, 0, dispinfo_read, invalid_write}, 
+  {"/dev/fbsync", 0, 0, 0, invalid_read, fbsync_write},
+  {"/proc/dispinfo", 128, 0, 0, dispinfo_read, invalid_write}, 
 #include "files.h"
 };
 
@@ -90,25 +90,39 @@ int fs_open(const char *filename,int flags,int mode)
 }
 size_t fs_read(int fd,void*buf,size_t len)
 {
-  assert(fd>=0&&fd<NR_FILES);
-  //Log("fs_read:try to open fd%d",fd);
-  if(fd<3)
-  {
-    //Log("fs_read:try to open fd%d,system file",fd);
-    return 0;
-  }
-  if(fd==FD_EVENTS)
-  {
-    return events_read(buf,0,len);
-  }
-  int n=fs_filesize(fd)-open_offset(fd);
-  if(len>n)
-  {
-    len=n;
-  }
-  ramdisk_read(buf,disk_offset(fd)+open_offset(fd),len);
-  set_open_offset(fd,open_offset(fd)+len);
-  return len;
+	assert(fd >= 0 && fd < NR_FILES);
+	/* operate reading via ramdisk APIs */
+	Finfo file = file_table[fd];
+	size_t rlen = -1;
+
+	/* set the correct read size */
+	if (file.open_offset > file.size)
+	{
+		printf("[fs_read failed] file %d current open offset %lu > file size %lu.\n", fd, file.open_offset, file.size);
+		return 0; //EOF
+	}
+
+	if (file.read){
+		rlen = file.read(buf, file.open_offset, len);
+		(&file_table[fd])->open_offset += rlen;
+	}
+	else{
+		/* set the correct read size */
+		/* set correct base offset */
+		size_t base_offset = file.open_offset < 0 ? 0 : file.open_offset;
+		len = file.open_offset < 0 ? len + file.open_offset : len;
+		if (len < 0){
+			return 0;
+		}
+		if(base_offset + len > file.size){
+			len = file.size - base_offset;
+		}
+		/* read via ramdisk API */
+		rlen = ramdisk_read(buf, file.disk_offset + base_offset, len);
+		/* update open offset */
+		(&file_table[fd])->open_offset = base_offset + rlen;
+	}
+	return rlen;
 }
 int fs_close(int fd)
 {
