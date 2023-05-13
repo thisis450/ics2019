@@ -30,7 +30,7 @@ static Finfo file_table[] __attribute__((used)) = {
   {"stdin", 0,  0, 0, invalid_read, invalid_write},
   {"stdout", 0, 0, 0,invalid_read, serial_write},
   {"stderr", 0, 0, 0,invalid_read, serial_write},
-
+  {"/dev/events", 0, 0, 0, events_read, invalid_write},
 #include "files.h"
 };
 
@@ -74,7 +74,7 @@ int fs_open(const char *filename,int flags,int mode)
 {
 	for (int i = 0; i < NR_FILES; i++){
 		if(strcmp(filename, file_table[i].name)==0){
-      printf("fs_open open file %s, fd: %d\n", filename, i);
+      Log("fs_open open file %s, fd: %d\n", filename, i);
 			return i;
       
 		}
