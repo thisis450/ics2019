@@ -48,7 +48,8 @@ make_EHelper(setcc);
 make_EHelper(not);
 make_EHelper(nop);
 make_EHelper(rol);
-
+make_EHelper(movsb);
+make_EHelper(movsl);
 
 
 make_EHelper(in);
