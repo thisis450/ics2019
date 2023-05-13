@@ -23,7 +23,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   Log("read_key suceesss\n");
   Log("key is%d\n",key);
 	if(key != _KEY_NONE)
-  {
+  {		Log("key_event\n");
 		if(key & 0x8000)
     {
 			key = key ^ 0x8000;
@@ -37,7 +37,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 		}
 	}
 	else
-  {		
+  {		Log("time_event\n");
 		sprintf(buf, "t %u\n", uptime());
 		Log("buf now is %s\n",buf);
 	}
