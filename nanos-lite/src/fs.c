@@ -110,6 +110,7 @@ size_t fs_read(int fd,void*buf,size_t len)
    if(fd==FD_DISPINFO)
    {
     dispinfo_read(buf,open_offset(fd),len);
+    set_open_offset(fd,open_offset(fd)+len);
     return len;
    }
 
