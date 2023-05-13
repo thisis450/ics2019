@@ -154,7 +154,7 @@ size_t fs_write(int fd, const void *buf, size_t len)
 	size_t wlen = -1;
 	Finfo file = file_table[fd];
 	if (file.open_offset > file.size){
-		printf("[fs_write failed] file %d current open offset %lu> file size %lu.\n", fd, file.open_offset, file.size);
+		Log("[fs_write failed] file %d current open offset %d> file size %d.\n", fd, file.open_offset, file.size);
 		return 0;
 	}
 	if(file.write){
