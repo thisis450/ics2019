@@ -55,7 +55,7 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-  	//Log("[fb_write] try to write offset: %lu, and size: %lu.\n", offset, len);
+  	Log("[fb_write] try to write offset: %lu, and size: %lu.\n", offset, len);
 	/* write the len bytes from buf to the screen(offset -> coord) */
 	/* calc w from len */
 	int w = len / 4;
