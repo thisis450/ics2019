@@ -18,28 +18,27 @@ static const char *keyname[256] __attribute__((used)) = {
 
 size_t events_read(void *buf, size_t offset, size_t len) {
 	Log("evetns_read\n");
-	char str[20];
-	bool down=false;
   int key = read_key();
-  Log("read_key success");
-  
+
+  Log("read_key suceesss\n");
+  Log("key is%d\n",key);
 	if(key != _KEY_NONE)
   {
 		if(key & 0x8000)
     {
 			key = key ^ 0x8000;
-			Log( "kd %s\n", keyname[key]);
+			sprintf(buf, "kd %s\n", keyname[key]);
 		}
 		else
     {
-			Log("ku %s\n", keyname[key]);
+			sprintf(buf, "ku %s\n", keyname[key]);
 		}
 	}
 	else
   {
-		Log("t %u\n", uptime());
+		sprintf(buf, "t %u\n", uptime());
 	}
-	return strlen(str);
+	return strlen(buf);
 }
 
 static char dispinfo[128] __attribute__((used)) = {};
