@@ -1,6 +1,6 @@
 #include "proc.h"
 #include <elf.h>
-#include<fs.h>
+#include"fs.h"
 #ifdef __ISA_AM_NATIVE__
 # define Elf_Ehdr Elf64_Ehdr
 # define Elf_Phdr Elf64_Phdr

@@ -12,7 +12,7 @@ typedef struct {
   WriteFn write;
 } Finfo;
 
-enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB,FD_EVENTS};
+enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB,FD_EVENTS,FD_FBSYNC,FD_DISPINFO};
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
@@ -61,84 +61,98 @@ int fs_open(const char *pathname, int flags, int mode){
 	Log("fs_open file %s, fd: %d\n", pathname, fd);
 	return fd;
 }
-
-size_t fs_read(int fd, void *buf, size_t len){
-	assert(fd >= 0 && fd < NR_FILES);
-	size_t rlen = -1;
-
-	if (file_table[fd].open_offset > file_table[fd].size)
-	{Log("fs_read :fd =%d,open_offset>size\n",fd);
-		return 0;
-	}
-
-	if (file_table[fd].read){
-		rlen = file_table[fd].read(buf, file_table[fd].open_offset, len);
-		(&file_table[fd])->open_offset += rlen;
-	}
-	else{
-
-		if(file_table[fd].open_offset + len > file_table[fd].size){
-			len = file_table[fd].size - file_table[fd].open_offset;
-		}
-		rlen = ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
-		(&file_table[fd])->open_offset = file_table[fd].open_offset + rlen;
-	}
-	return rlen;
-}
-
-size_t fs_write(int fd, const void *buf, size_t len)
-{
-	assert(fd >= 0 && fd < NR_FILES);
-	size_t wlen = -1;
-	if (file_table[fd].open_offset > file_table[fd].size){
-		//Log("fs_write out of size\n");
-		return 0;
-	}
-	if(file_table[fd].write){
-		wlen = file_table[fd].write(buf, file_table[fd].open_offset, len);
-		(&file_table[fd])->open_offset += wlen;
-	}
-	else{
-
-		if(file_table[fd].open_offset + len > file_table[fd].size){
-			len = file_table[fd].size - file_table[fd].open_offset;
-		}
-		/* write via ramdisk API */
-		wlen = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
-		/* update open offset */
-		(&file_table[fd])->open_offset = file_table[fd].open_offset + wlen;
-	}
-	return wlen;
-}
-
-size_t fs_lseek(int fd, size_t offset, int whence)
-{
-	//Log("fs_lseek,whence=%d\n",whence);
-	assert(fd < NR_FILES && fd > FD_STDERR);
-	Finfo *file = &file_table[fd];
-  switch (whence){
-  case SEEK_CUR:
-    file->open_offset += offset;
-		return  file->open_offset;
-  break;
-  case SEEK_SET:
-  		file->open_offset = offset;
-		return file->open_offset;
-    break;
-  case SEEK_END:
-  		file->open_offset = file->size + offset;
-		return file->open_offset;
-    break;
-  default:
-  		Log("fs_lseek wrong whence=%d\n",whence);
-		assert(0);
-  break;
-  }
-  return 0;
-}
-
 int fs_close(int fd)
 {
 	return 0;
+}
+size_t fs_filesz(int fd)
+{
+  return file_table[fd].size;
+}
+size_t disk_offset(int fd)
+{
+  return file_table[fd].disk_offset;
+}
+size_t get_open_offset(int fd)
+{
+  return file_table[fd].open_offset;
+}
+void set_open_offset(int fd,size_t n)
+{
+  assert(n>=0);
+  if(n>file_table[fd].size)
+  {
+    n=file_table[fd].size;
+  }
+  file_table[fd].open_offset=n;
+}
+size_t fs_lseek(int fd,size_t offset,int whence)
+{
+  switch(whence)
+  {
+    case SEEK_SET:
+    set_open_offset(fd,offset);
+    return get_open_offset(fd);
+    case SEEK_CUR:
+    set_open_offset(fd,get_open_offset(fd)+offset);
+    return get_open_offset(fd);
+    case SEEK_END:
+    set_open_offset(fd,fs_filesz(fd)+offset);
+    return get_open_offset(fd);
+    default:
+    Log("wrong whence=%d\n",whence);
+    return -1;
+  }
+}
+size_t fs_read(int fd,void*buf,size_t len)
+{
+  if(fd<4)
+  {
+Log("fs_read wrong fd<4\n");
+return 0;
+  }
+    if(fd==FD_EVENTS)
+  {
+    return events_read(buf,0,len);
+  }
+  int n=fs_filesz(fd)-get_open_offset(fd);
+  if(n>len)
+  {
+    n=len;
+  }
+  if(fd==FD_DISPINFO)
+  {
+    dispinfo_read(buf,get_open_offset(fd),n);
+  }
+  else
+  {
+    ramdisk_read(buf,disk_offset(fd)+get_open_offset(fd),n);
+  }
+  set_open_offset(fd,get_open_offset(fd)+n);
+  return n;
+}
+size_t fs_write(int fd,void*buf,size_t len)
+{
+  if(fd<3||fd==FD_DISPINFO)
+  {
+    Log("fs_write wrong fd=%d\n",fd);
+    return 0;
+  }
+  int n=fs_filesz(fd)-get_open_offset(fd);
+    if(n>len)
+  {
+    n=len;
+  }
+  if(fd==FD_FB)
+  {
+    fb_write(buf,get_open_offset(fd),n);
+
+  }
+  else
+  {
+    ramdisk_write(buf,disk_offset(fd)+get_open_offset(fd),n);
+  }
+  set_open_offset(fd,get_open_offset(fd)+n);
+  return n;
 }
 
