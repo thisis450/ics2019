@@ -12,7 +12,7 @@ typedef struct {
   WriteFn write;
 } Finfo;
 
-enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB,FD_EVENTS};
+enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB,FD_EVENTS,FD_FBSYNC,FD_DISPINFO};
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
@@ -92,20 +92,28 @@ size_t fs_read(int fd,void*buf,size_t len)
 {
   assert(fd>=0&&fd<NR_FILES);
   //Log("fs_read:try to open fd%d",fd);
-  if(fd<3)
+  if(fd<3||fd==FD_FB)
   {
     //Log("fs_read:try to open fd%d,system file",fd);
     return 0;
   }
-  if(fd==FD_EVENTS)
+    if(fd==FD_EVENTS)
   {
     return events_read(buf,0,len);
   }
-  int n=fs_filesize(fd)-open_offset(fd);
-  if(len>n)
+    int n=fs_filesize(fd)-open_offset(fd);
+    if(len>n)
   {
     len=n;
   }
+ 
+   if(fd==FD_DISPINFO)
+   {
+    dispinfo_read(buf,open_offset(fd),len);
+    return len;
+   }
+
+  
   ramdisk_read(buf,disk_offset(fd)+open_offset(fd),len);
   set_open_offset(fd,open_offset(fd)+len);
   return len;
