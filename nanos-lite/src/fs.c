@@ -66,10 +66,7 @@ size_t fs_read(int fd, void *buf, size_t len){
 	assert(fd >= 0 && fd < NR_FILES);
 	size_t rlen = -1;
 
-	if (file_table[fd].open_offset > file_table[fd].size)
-	{Log("fs_read :fd =%d,open_offset>size\n",fd);
-		return 0;
-	}
+
 
 	if (file_table[fd].read){
 		rlen = file_table[fd].read(buf, file_table[fd].open_offset, len);
