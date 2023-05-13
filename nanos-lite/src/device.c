@@ -37,10 +37,11 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 		}
 	}
 	else
-  {
+  {		
 		sprintf(buf, "t %u\n", uptime());
 		Log("buf now is %s\n",buf);
 	}
+	Log("finish events_read\n");
 	return strlen(buf);
 }
 
