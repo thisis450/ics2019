@@ -64,24 +64,36 @@ int fs_open(const char *pathname, int flags, int mode){
 
 size_t fs_read(int fd, void *buf, size_t len){
 	assert(fd >= 0 && fd < NR_FILES);
+	/* operate reading via ramdisk APIs */
+	Finfo file = file_table[fd];
 	size_t rlen = -1;
 
-	if (file_table[fd].open_offset > file_table[fd].size)
-	{Log("fs_read :fd =%d,open_offset>size\n",fd);
-		return 0;
+	/* set the correct read size */
+	if (file.open_offset > file.size)
+	{
+		printf("[fs_read failed] file %d current open offset %lu > file size %lu.\n", fd, file.open_offset, file.size);
+		return 0; //EOF
 	}
 
-	if (file_table[fd].read){
-		rlen = file_table[fd].read(buf, file_table[fd].open_offset, len);
+	if (file.read){
+		rlen = file.read(buf, file.open_offset, len);
 		(&file_table[fd])->open_offset += rlen;
 	}
 	else{
-
-		if(file_table[fd].open_offset + len > file_table[fd].size){
-			len = file_table[fd].size - file_table[fd].open_offset;
+		/* set the correct read size */
+		/* set correct base offset */
+		size_t base_offset = file.open_offset < 0 ? 0 : file.open_offset;
+		len = file.open_offset < 0 ? len + file.open_offset : len;
+		if (len < 0){
+			return 0;
 		}
-		rlen = ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
-		(&file_table[fd])->open_offset = file_table[fd].open_offset + rlen;
+		if(base_offset + len > file.size){
+			len = file.size - base_offset;
+		}
+		/* read via ramdisk API */
+		rlen = ramdisk_read(buf, file.disk_offset + base_offset, len);
+		/* update open offset */
+		(&file_table[fd])->open_offset = base_offset + rlen;
 	}
 	return rlen;
 }
@@ -90,23 +102,29 @@ size_t fs_write(int fd, const void *buf, size_t len)
 {
 	assert(fd >= 0 && fd < NR_FILES);
 	size_t wlen = -1;
-	if (file_table[fd].open_offset > file_table[fd].size){
-		Log("fs_write out of size\n");
+	Finfo file = file_table[fd];
+	if (file.open_offset > file.size){
+		printf("[fs_write failed] file %d current open offset %lu> file size %lu.\n", fd, file.open_offset, file.size);
 		return 0;
 	}
-	if(file_table[fd].write){
-		wlen = file_table[fd].write(buf, file_table[fd].open_offset, len);
+	if(file.write){
+		wlen = file.write(buf, file.open_offset, len);
 		(&file_table[fd])->open_offset += wlen;
 	}
 	else{
-
-		if(file_table[fd].open_offset + len > file_table[fd].size){
-			len = file_table[fd].size - file_table[fd].open_offset;
+		/* set correct base offset */
+		size_t base_offset = file.open_offset < 0 ? 0 : file.open_offset;
+		len = file.open_offset < 0 ? len + file.open_offset : len;
+		if(len < 0){
+			return 0;
+		}
+		if(base_offset + len > file.size){
+			len = file.size - base_offset;
 		}
 		/* write via ramdisk API */
-		wlen = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
+		wlen = ramdisk_write(buf, file.disk_offset + base_offset, len);
 		/* update open offset */
-		(&file_table[fd])->open_offset = file_table[fd].open_offset + wlen;
+		(&file_table[fd])->open_offset = base_offset + wlen;
 	}
 	return wlen;
 }
