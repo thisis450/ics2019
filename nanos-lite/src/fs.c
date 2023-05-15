@@ -58,8 +58,6 @@ size_t fs_read(int fd, void *buf, size_t len)
 {
 	//TODO();
 	size_t true_len;
-	//Log("start");
-	//Log("len=%d,size=%d,open=%d\n",len,file_table[fd].size,file_table[fd].open_offset);
 	if (fd ==FD_EVENTS||file_table[fd].open_offset+len<file_table[fd].size)
 		true_len=len;
 	else
@@ -74,7 +72,6 @@ size_t fs_read(int fd, void *buf, size_t len)
 		ret=ramdisk_read(buf,file_table[fd].disk_offset+file_table[fd].open_offset,true_len);
   }
 	file_table[fd].open_offset+=ret;
-	//if (file_table[fd].open_offset==4548) while(1);
 	return ret;
 }
 size_t fs_write(int fd,const void *buf,size_t len)
@@ -113,7 +110,7 @@ size_t fs_lseek(int fd,size_t offset,int whence)
     file_table[fd].open_offset+=offset;
     break;
 		case SEEK_END:
-    file_table[fd].open_offset=file_table[fd].size+offset;
+    file_table[fd].open_offset=file_table[fd].size;
     break;
 		default:
     Log("wrong whence=%d\n",whence);
