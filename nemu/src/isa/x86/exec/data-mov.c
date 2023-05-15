@@ -98,19 +98,3 @@ make_EHelper(lea) {
   operand_write(id_dest, &id_src->addr);
   print_asm_template2(lea);
 }
-make_EHelper(movsb){
-	s0 = reg_l(R_ESI);
-	rtl_lm(&s0, &s0, 1);
-	rtl_sm(&reg_l(R_EDI), &s0, 1);
-	reg_l(R_ESI) += 1;
-	reg_l(R_EDI) += 1;
-	print_asm_template2(movsb);
-}
-make_EHelper(movsl){
-	s0 = reg_l(R_ESI);
-	rtl_lm(&s0, &s0, 4);
-	rtl_sm(&reg_l(R_EDI), &s0, 4);
-	reg_l(R_ESI) += 4;
-	reg_l(R_EDI) += 4;
-	print_asm_template2(movsl);
-}
