@@ -14,7 +14,8 @@ void hello_fun(void *arg) {
   int j = 1;
   while (1) {
     Log("Hello World from Nanos-lite for the %dth time!", j);
-    Log(" arg is %s",arg);
+    int ele=(int)arg;
+    Log(" arg is %d",ele);
     j ++;
     _yield();
   }
