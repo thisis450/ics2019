@@ -80,7 +80,7 @@ void __am_switch(_Context *c) {
 }
 
 int _map(_AddressSpace *as, void *va, void *pa, int prot) {
-    uint32_t *ptr = (uint32_t *)as->ptr;
+  uint32_t *ptr = (uint32_t *)as->ptr;
   uint32_t shift = (uintptr_t)va >> 22;
   uintptr_t tr = ptr[shift];
   if (tr == kpdirs[shift])
