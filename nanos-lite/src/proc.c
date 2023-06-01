@@ -38,19 +38,20 @@ void init_proc() {
   // switch_boot_pcb();
   
 context_uload(&pcb[0], "/bin/pal", 0, arg, NULL);
+context_uload(&pcb[1], "/bin/hello", 0, arg, NULL);
 }
 
 _Context* schedule(_Context *prev) {
 
     current->cp = prev;
-    // if(current==&pcb[0])
-    // {
-    //   current=&pcb[1];
-    // }
-    // else
-    // {
-    // current=&pcb[0];
-    // }
-    current = &pcb[0];
+    if(current==&pcb[0])
+    {
+      current=&pcb[1];
+    }
+    else
+    {
+    current=&pcb[0];
+    }
+    // current = &pcb[0];
     return current->cp;
 }
