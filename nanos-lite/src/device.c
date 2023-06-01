@@ -29,6 +29,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 		if(key & 0x8000)
     {
 			key = key ^ 0x8000;
+			change_front_program(key);
 			sprintf(buf, "kd %s\n", keyname[key]);
 			//Log("buf now is %s\n",buf);
 		}
