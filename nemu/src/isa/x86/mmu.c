@@ -1,4 +1,11 @@
 #include "nemu.h"
+#define PTXSHFT 12 // Offset of PTX in a linear address
+#define PDXSHFT 22 // Offset of PDX in a linear address
+#define PDX(va) (((uint32_t)(va) >> PDXSHFT) & 0x3ff)
+#define PTX(va) (((uint32_t)(va) >> PTXSHFT) & 0x3ff)
+#define OFF(va) ((uint32_t)(va)&0xfff)
+#define VPAGE_NUM(va) ((uint32_t)(va) >> PTXSHFT)
+#define PTE_ADDR(pte) ((uint32_t)(pte) & ~0xfff)
 
 uint32_t page_translate(uint32_t addr)
 {
