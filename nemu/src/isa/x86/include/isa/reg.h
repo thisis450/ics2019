@@ -2,7 +2,7 @@
 #define __X86_REG_H__
 
 #include "common.h"
-
+#include"mmu.h"
 #define PC_START IMAGE_START
 
 enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
@@ -53,7 +53,9 @@ typedef struct {
 		uint16_t limit;
 		uint32_t base;
 	}idtr;
-  
+	CR0 cr0;
+	CR3 cr3;
+	bool INTR;
 
 } CPU_state;
 
