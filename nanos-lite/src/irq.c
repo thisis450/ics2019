@@ -10,7 +10,7 @@ static _Context* do_event(_Event e, _Context* c) {
 			return do_syscall(c);
 			break;
       case _EVENT_IRQ_TIMER:
-     Log("_EVENT_IRQ_TIMER");
+     //Log("_EVENT_IRQ_TIMER");
     _yield();
     break;
     default: panic("Unhandled event ID = %d", e.event);
