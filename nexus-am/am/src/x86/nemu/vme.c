@@ -87,7 +87,7 @@ _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, 
   _Context *c=(_Context*)(ustack.end-16-sizeof(_Context));
 c->eip=(uintptr_t)entry;
 c->cs=8;
-c->eflags=0x00000202;
+c->eflags=0x202;
 c->as=as;
 return c;
 }
