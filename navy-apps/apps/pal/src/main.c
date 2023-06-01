@@ -561,7 +561,8 @@ main_loop(int argc,char *argv[]) {
             tf=1;
          }
       }
-   if(!tf){
+   if(!tf)
+   {
    PAL_TrademarkScreen();
    PAL_SplashScreen();
    }
