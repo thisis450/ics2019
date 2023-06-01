@@ -37,7 +37,7 @@ void init_proc() {
   // context_uload(&pcb[1], "/bin/pal", 2, arg, NULL);
   // switch_boot_pcb();
   
-naive_uload(NULL, "/bin/dummy");
+context_uload(&pcb[0], "/bin/dummy", 0, arg, NULL);
 }
 
 _Context* schedule(_Context *prev) {
