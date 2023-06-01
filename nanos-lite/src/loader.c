@@ -103,7 +103,6 @@ static uintptr_t loader(PCB *pcb, const char *filename)
         int gap = page_size - ((uint32_t)v_addr & 0xfff);
         if (mov_size > gap)
           mov_size = gap;
-        // 原来的框架写的还挺方便
         p_addr = new_page(1);
         p_addr = (void *)((uint32_t)p_addr | ((uint32_t)v_addr & 0xfff));
         _map(&pcb->as, v_addr, p_addr, _PROT_EXEC);
@@ -129,7 +128,6 @@ static uintptr_t loader(PCB *pcb, const char *filename)
         v_addr += mov_size;
         len += mov_size;
       }
-      // max_brk应该是最后一个段吧
       pcb->max_brk = pcb->max_brk > ROUNDUP(v_addr, page_size) ? pcb->max_brk : ROUNDUP(v_addr, page_size);
     }
   }
@@ -141,7 +139,7 @@ static uintptr_t loader(PCB *pcb, const char *filename)
 void naive_uload(PCB *pcb, const char *filename) {
   uintptr_t entry = loader(pcb, filename);
   Log("Jump to entry = %x", entry);
-  ((void(*)())entry) ();//Log("4396");
+  ((void(*)())entry) ();
 }
 
 
