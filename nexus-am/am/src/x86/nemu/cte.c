@@ -10,6 +10,7 @@ void __am_vecnull();
 
 _Context* __am_irq_handle(_Context *c) {
   _Context *next = c;
+  __am_get_cur_as(c);
   if (user_handler) {
     _Event ev = {0};
     switch (c->irq) {
@@ -41,7 +42,7 @@ _Context* __am_irq_handle(_Context *c) {
       next = c;
     }
   }
-
+__am_switch(next);
   return next;
 }
 

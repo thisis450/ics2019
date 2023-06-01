@@ -32,7 +32,7 @@ uint32_t isa_vaddr_read(vaddr_t addr, int len)
     return paddr_read(addr, len);
   uint32_t s_vpage_num = VPAGE_NUM(addr);
   uint32_t e_vpage_num = VPAGE_NUM(addr + len - 1);
-  if (s_vpage_num == e_vpage_num) // 没有出现跨页
+  if (s_vpage_num == e_vpage_num)
     return paddr_read(page_translate(addr), len);
   else
   {
