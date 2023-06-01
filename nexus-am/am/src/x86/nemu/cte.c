@@ -72,10 +72,10 @@ _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
 _Context *c=(_Context*)(stack.end-sizeof(_Context)-8);
   void ** arg_stack=(void**)(stack.end-4);
   *arg_stack=arg;
-if(arg==0)
-{
-  printf("no such arg!\n");
-}
+// if(arg==0)
+// {
+//   printf("no such arg!\n");
+// }
 c->eip=(uintptr_t)entry;
 c->eflags=0x2;
 c->cs=8;

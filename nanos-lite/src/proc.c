@@ -28,7 +28,7 @@ void init_proc() {
   // // load program here
   // naive_uload(0, "/bin/bmptest");
   context_kload(&pcb[0], hello_fun, "kernel thread 233");
-  context_kload(&pcb[1], hello_fun, "kernel thread 666");
+  context_uload(&pcb[1], "/bin/pal");
   switch_boot_pcb();
 
 }
