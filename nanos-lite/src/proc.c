@@ -18,7 +18,7 @@ void hello_fun(void *arg) {
     _yield();
   }
 }
-
+char *arg[] = {"/bin/pal", "--skip"};
 void init_proc() {
 
   // switch_boot_pcb();
@@ -28,7 +28,7 @@ void init_proc() {
   // // load program here
   // naive_uload(0, "/bin/bmptest");
   context_kload(&pcb[0], hello_fun, "kernel thread 233");
-  context_uload(&pcb[1], "/bin/pal");
+  context_uload(&pcb[1], "/bin/pal", 2, arg, NULL);
   switch_boot_pcb();
 
 }
