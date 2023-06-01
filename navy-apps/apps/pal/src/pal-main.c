@@ -6,7 +6,8 @@ void hal_init();
 int
 main(void) {
 	Log("game start!");
-
+	for (int i = 0; i < argc; i++)
+		printf("%s\n", argv[i]);
   hal_init();
 	main_loop();
 
