@@ -80,18 +80,17 @@ void __am_switch(_Context *c) {
 }
 
 int _map(_AddressSpace *as, void *va, void *pa, int prot) {
-  uint32_t *ptr = (uint32_t *)as->ptr;
-  uint32_t shift = (uintptr_t)va >> 22;
-  uintptr_t tr = ptr[shift];
-  if (tr == kpdirs[shift])
-  {
-    PTE *uptable = (PTE *)(pgalloc_usr(1));
-    ptr[shift] = (uintptr_t)uptable | PTE_P;
+  PDE *pgdir = as->ptr;
+  uint32_t dir_index = ((uint32_t)va >> 22);
+  uint32_t tab_index = (((uint32_t)va >> 12) & 0x3ff);
+  PTE *pgtab = (PTE *)(pgdir[dir_index] & ~0xfff);
+  if (!(pgdir[dir_index] & 1))
+  { 
+    pgtab = (PTE *)(pgalloc_usr(1));
+    pgdir[dir_index] = (PDE)pgtab;
+    pgdir[dir_index] |= 1;
   }
-  tr = ptr[shift];
-  shift = (((uintptr_t)va) & 0x003ff000) >> 12;
-  uint32_t *pgr = (uint32_t *)(tr & 0xfffff000);
-  pgr[shift] = (uintptr_t)pa | PTE_P;
+  pgtab[tab_index] = (((uint32_t)pa & ~0xfff) | 1);
   return 0;
 }
 
