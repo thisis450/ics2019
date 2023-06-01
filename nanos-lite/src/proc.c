@@ -13,8 +13,7 @@ void switch_boot_pcb() {
 void hello_fun(void *arg) {
   int j = 1;
   while (1) {
-    printf("arg is %s",arg);
-    Log("Hello World from Nanos-lite for the %dth time!,arg is %s", j,arg);
+    Log("Hello World from Nanos-lite for the %dth time!,arg is %s", j,(char *)arg);
     j ++;
     _yield();
   }
@@ -28,8 +27,8 @@ void init_proc() {
 
   // // load program here
   // naive_uload(0, "/bin/bmptest");
-  context_kload(&pcb[0], hello_fun, 1);
-  context_kload(&pcb[1], hello_fun, 2);
+  context_kload(&pcb[0], hello_fun, "kernel thread 233");
+  context_kload(&pcb[1], hello_fun, "kernel thread 666");
   switch_boot_pcb();
 
 }
