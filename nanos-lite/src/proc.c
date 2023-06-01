@@ -29,7 +29,7 @@ void init_proc() {
   // naive_uload(0, "/bin/bmptest");
 
 
-  // context_kload(&pcb[0], hello_fun, "kernel thread 233");
+   context_kload(&pcb[0], hello_fun, "kernel thread 1");
   // context_uload(&pcb[1], "/bin/pal", 2, arg, NULL);
 
 
