@@ -83,11 +83,17 @@ int _map(_AddressSpace *as, void *va, void *pa, int prot) {
   return 0;
 }
 
-_Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, void *args) {
-  _Context *c=(_Context*)(ustack.end-16-sizeof(_Context));
-c->eip=(uintptr_t)entry;
-c->cs=8;
-c->eflags=0x202;
-c->as=as;
-return c;
+_Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, int argc, char *const argv[], char *const envp[])
+{
+  extern void memcpy(void *, const void *, int);
+  memcpy(ustack.end - 12, (void *)(&argc), 4);
+  memcpy(ustack.end - 8, (void *)(&argv), 4);
+  memcpy(ustack.end - 4, (void *)(&envp), 4);
+
+  _Context *new_context = ustack.end - 16 - sizeof(_Context);
+  new_context->as = as;
+  new_context->eip = (uintptr_t)entry;
+  new_context->cs = 8;
+  new_context->eflags = 0x202;
+  return new_context;
 }
