@@ -8,8 +8,8 @@ uint32_t sys_yield(){
 uint32_t sys_exit(int state){
 	_halt(state);
 }
-uint32_t sys_brk(int addr)
-{
+uint32_t sys_brk(uintptr_t brk, intptr_t increment)
+{	mm_brk(brk,increment);
 	return 0;
 }
 
@@ -29,7 +29,7 @@ uintptr_t res = 0;
 		res = sys_exit(a[1]); break;
 		case SYS_brk:
 		//Log("sys_brk \n"); 
-		res=sys_brk(a[1]); break;
+		res=sys_brk(a[1],a[2]); break;
 		case SYS_open: 
 		//Log("sys_open \n");
 		res = fs_open((const char *)a[1], a[2]); break;
