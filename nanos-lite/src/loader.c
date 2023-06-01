@@ -75,10 +75,11 @@ static uintptr_t loader(PCB *pcb, const char *filename)
   fs_close(fd);
   return elf_head.e_entry;
 }
-void naive_uload(PCB *pcb, const char *filename) {
+void naive_uload(PCB *pcb, const char *filename)
+{
   uintptr_t entry = loader(pcb, filename);
-  Log("Jump to entry = %x", entry);
-  ((void(*)())entry) ();
+  Log("Jump to entry = 0x%x", entry);
+  ((void (*)())entry)();
 }
 
 void context_kload(PCB *pcb, void *entry,void*arg) {
@@ -89,12 +90,14 @@ void context_kload(PCB *pcb, void *entry,void*arg) {
   pcb->cp = _kcontext(stack, entry, arg);
 }
 
-void context_uload(PCB *pcb, const char *filename) {
+void context_uload(PCB *pcb, const char *filename, int argc, char *const argv[], char *const envp[])
+{
+  _protect(&pcb->as);
   uintptr_t entry = loader(pcb, filename);
 
   _Area stack;
   stack.start = pcb->stack;
   stack.end = stack.start + sizeof(pcb->stack);
 
-  pcb->cp = _ucontext(&pcb->as, stack, stack, (void *)entry, NULL);
+  pcb->cp = _ucontext(&pcb->as, stack, stack, (void *)entry, argc, argv, envp);
 }
