@@ -3,13 +3,14 @@
 #include <assert.h>
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-  assert(0);
-  return 0;
+  int sig=(a&0x8000000)^(b&0x80000000);
+  a=a&0x7fffffff,b=b&0x7fffffff;
+  
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-  assert(0);
-  return 0;
+  int sig=(a&0x8000000)^(b&0x80000000);
+  a=a&0x7fffffff,b=b&0x7fffffff;
 }
 
 FLOAT f2F(float a) {

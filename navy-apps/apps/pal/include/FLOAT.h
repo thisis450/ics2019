@@ -6,23 +6,41 @@
 typedef int FLOAT;
 
 static inline int F2int(FLOAT a) {
-  assert(0);
-  return 0;
+  int sig=a&0x80000000;
+  if(sig)
+  {
+    a=a&0x7fffffff;
+    a=a/(1<<16);
+    a=a|0x80000000;
+    return a;
+  }
+  return a/(1<<16);
 }
 
 static inline FLOAT int2F(int a) {
-  assert(0);
-  return 0;
+  int sig=a&0x80000000;
+  a=a&0x7fffffff;
+  a=a*(1<<16);
+  a=a|sig;
+  return a;
+
 }
 
 static inline FLOAT F_mul_int(FLOAT a, int b) {
-  assert(0);
-  return 0;
+  int sig=(a&0x8000000)^(b&0x80000000);
+  a=a&0x7fffffff,b=b&0x7fffffff;
+  a=a*b;
+  a=a|sig;
+  return a;
+  
 }
 
 static inline FLOAT F_div_int(FLOAT a, int b) {
-  assert(0);
-  return 0;
+int sig=(a&0x8000000)^(b&0x80000000);
+a=a&0x7fffffff,b=b&0x7fffffff;
+a=a/b;
+a=a|sig;
+return a;
 }
 
 FLOAT f2F(float);
