@@ -23,7 +23,7 @@ static inline FLOAT int2F(int a) {
 }
 
 static inline FLOAT F_mul_int(FLOAT a, int b) {
-  int sig=(a&0x8000000)^(b&0x80000000);
+  int sig=(a&0x80000000)^(b&0x80000000);
   a=a&0x7fffffff,b=b&0x7fffffff;
   a=a*b;
   a=a|sig;
@@ -32,7 +32,7 @@ static inline FLOAT F_mul_int(FLOAT a, int b) {
 }
 
 static inline FLOAT F_div_int(FLOAT a, int b) {
-int sig=(a&0x8000000)^(b&0x80000000);
+int sig=(a&0x80000000)^(b&0x80000000);
 a=a&0x7fffffff,b=b&0x7fffffff;
 a=a/b;
 a=a|sig;

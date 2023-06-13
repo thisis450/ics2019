@@ -3,7 +3,7 @@
 #include <assert.h>
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-  int sig=(a&0x8000000)^(b&0x80000000);
+  int sig=(a&0x80000000)^(b&0x80000000);
   a=a&0x7fffffff,b=b&0x7fffffff;
   FLOAT result=((int64_t)a*(int64_t)b)>>16;
   result=result|sig;
@@ -13,7 +13,7 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
   assert(b!=0);
-  int sig=(a&0x8000000)^(b&0x80000000);
+  int sig=(a&0x80000000)^(b&0x80000000);
   a=a&0x7fffffff,b=b&0x7fffffff;
   int in=a/b;
   int fl=a%b;
