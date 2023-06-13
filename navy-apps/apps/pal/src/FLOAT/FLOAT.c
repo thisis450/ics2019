@@ -5,12 +5,32 @@
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
   int sig=(a&0x8000000)^(b&0x80000000);
   a=a&0x7fffffff,b=b&0x7fffffff;
+  FLOAT result=((int64_t)a*(int64_t)b)>>16;
+  result=result|sig;
+  return result;
   
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
+  assert(b!=0);
   int sig=(a&0x8000000)^(b&0x80000000);
   a=a&0x7fffffff,b=b&0x7fffffff;
+  int in=a/b;
+  int fl=a%b;
+  FLOAT res=in<<16;
+  for(int i=0;i<16;i++)
+  {
+    fl<<=1;
+    if(fl>=b)
+    {
+      fl-=b;
+      res+=1<<(16-i-1);
+    }
+  }
+  res=res|sig;
+  return res;
+
+
 }
 
 FLOAT f2F(float a) {
@@ -24,13 +44,40 @@ FLOAT f2F(float a) {
    * performing arithmetic operations on it directly?
    */
 
-  assert(0);
-  return 0;
+  uint32_t content=*(uint32_t*)&a;
+  uint32_t sig=(content&0x80000000);
+  uint32_t exp=(content^sig)>>23;
+  uint32_t m=(content&0x007fffff);
+  if(exp==0)
+  {
+    return 0;
+  }
+  else if(exp==255)
+  {
+    assert(0);
+  }
+  else
+  {
+    m+=1<<23;
+    m>>=(23-16);
+    if(e>=127)
+    {
+      m<<=(e-127);
+    }
+    else
+    {
+      m>>=(127-e);
+    }
+  }
+  m=m|sig;
+  return m;
+
+
+
 }
 
 FLOAT Fabs(FLOAT a) {
-  assert(0);
-  return 0;
+  return (a>0?a:-a);
 }
 
 /* Functions below are already implemented */

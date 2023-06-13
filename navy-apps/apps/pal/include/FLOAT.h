@@ -7,20 +7,16 @@ typedef int FLOAT;
 
 static inline int F2int(FLOAT a) {
   int sig=a&0x80000000;
-  if(sig)
-  {
     a=a&0x7fffffff;
-    a=a/(1<<16);
-    a=a|0x80000000;
+    a=a>>16;
+    a=a|sig;
     return a;
-  }
-  return a/(1<<16);
 }
 
 static inline FLOAT int2F(int a) {
   int sig=a&0x80000000;
   a=a&0x7fffffff;
-  a=a*(1<<16);
+  a=a<<16;
   a=a|sig;
   return a;
 
