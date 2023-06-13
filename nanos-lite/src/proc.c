@@ -59,15 +59,9 @@ _Context* schedule(_Context *prev) {
     // // current = &pcb[0];
     // return current->cp;
 
-  static int pcb1_times = 0;
+
   current->cp = prev;
   current = front_p;
-  if (pcb1_times == 50)
-  {
-    current = &pcb[3];
-    pcb1_times = 0;
-  }
-  pcb1_times++;
   return current->cp;
 
 
